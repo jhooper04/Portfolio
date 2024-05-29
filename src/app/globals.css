@@ -1,0 +1,283 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-base: 17, 24, 39;
+    --color-base-alt: 0, 0, 0;
+
+    --color-text-base: 243, 244, 246;
+    --color-text-alt: 243, 244, 246;
+    --color-text-muted: 229, 231, 235;
+    --color-text-alt-muted: 0, 0, 0;
+      
+    --color-primary: 0, 92, 230;
+    --color-secondary: 255, 187, 51;
+}
+
+.dark {
+    --color-base: 17, 24, 39;
+    --color-base-alt: 31, 44, 71;
+
+    --color-text-base: 204, 217, 255;
+    --color-text-alt: 230, 236, 255;
+    --color-text-muted: 0, 42, 179;
+    --color-text-alt-muted: 0, 48, 204;
+      
+    --color-primary: 0, 92, 230;
+    --color-secondary: 255, 187, 51;
+}
+
+#logo path:nth-child(1) {
+    stroke-dasharray: 2110.810302734375;
+    stroke-dashoffset: 2110.810302734375;
+    animation: writename 2s linear forwards;
+}
+
+#logo path:nth-child(2) {
+    stroke-dasharray: 2951.58447265625;
+    stroke-dashoffset: 2951.58447265625;
+    animation: writename 2s linear 2s forwards;
+}
+
+@keyframes writename {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes sparkle {
+    from {
+        offset-distance: 0%;
+    }
+    to {
+        offset-distance: 100%;
+    }
+}
+
+@keyframes grow-spin {
+    0% {
+        transform: translate(-10px, -10px) scale(0.6) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-10px, -10px) scale(1) rotate(90deg);
+    }
+    100% {
+        transform: translate(-10px, -10px) scale(0.6) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+@layer base {
+    body {
+        /*@apply bg-surface-light-1 dark:bg-surface-dark-1 text-neutral-light dark:text-neutral-dark;*/
+        @apply bg-base text-base;
+    }
+}
+
+@layer components {
+    .typo-h1 {
+        @apply text-3xl tracking-tighter;
+    }
+    .typo-h2 {
+        @apply text-3xl tracking-tighter;
+    }
+    .typo-h3 {
+        @apply text-3xl tracking-tighter;
+    }
+    .typo-h4 {
+        @apply text-3xl tracking-tighter;
+    }
+    .typo-h5 {
+        @apply text-3xl tracking-tighter;
+    }
+    .typo-h6 {
+        @apply text-3xl tracking-tighter;
+    }
+    .typo-subtitle {
+        @apply text-[16px] tracking-[0.15em];
+    }
+    .typo-subtitle-2 {
+        @apply text-[14px] tracking-[0.15em];
+    }
+    .typo-body {
+        @apply text-[16px] tracking-[0.5em];
+    }
+    .typo-body-2 {
+        @apply text-[14px] tracking-[0.25em];
+    }
+    .typo-button {
+        @apply text-[14px] tracking-[0.25em];
+    }
+    .typo-caption {
+        @apply text-[16px] tracking-[0.5em];
+    }
+    .typo-caption-2 {
+        @apply text-[14px] tracking-[0.25em];
+    }
+
+    .switch {
+        @apply relative inline-block w-[60px] h-8;
+    }
+    .switch input {
+        @apply opacity-0 size-0;
+    }
+    .slider {
+        /* @apply absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-neutral-400 duration-300; */
+        @apply absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-base-alt opacity-30 duration-300;
+    }
+    .slider:before {
+        /* @apply absolute size-6 top-1 left-1 bottom-1 bg-neutral-200 duration-300; */
+        @apply absolute size-6 top-1 left-1 bottom-1 bg-base-alt opacity-10 duration-300;
+        content: "";
+    }
+    .switch .icon {
+        /* @apply relative inline-block top-[3px] left-[7px] duration-300 text-neutral-400 dark:text-neutral-700; */
+        @apply relative inline-block top-[3px] left-[7px] duration-300 text-base;
+    }
+    input:checked + .slider > .icon {
+        /* @apply text-primary-light dark:text-primary-dark; */
+        @apply text-primary;
+    }
+    input:checked + .slider {
+        /* @apply bg-primary-light opacity-65 dark:bg-primary-dark; */
+        @apply bg-primary opacity-65;
+    }
+    input:focus + .slider {
+        @apply shadow-md;
+    }
+    input:checked + .slider:before {
+        @apply translate-x-[28px];
+    }
+    input:checked + .slider > .icon {
+        @apply translate-x-[28px];
+    }
+    .slider > .icon > .night {
+        @apply inline-block;
+    }
+    input:checked + .slider > .icon > .night {
+        @apply hidden;
+    }
+    .slider > .icon > .day {
+        @apply hidden;
+    }
+    input:checked + .slider > .icon > .day {
+        @apply inline-block;
+    }
+    .slider.round {
+        @apply rounded-full;
+    }
+    .slider.round:before {
+        @apply rounded-full;
+    }
+
+    .navtext {
+        /* @apply text-neutral-light dark:text-neutral-dark hover:text-primary-light dark:hover:text-primary-dark */
+        @apply text-base hover:text-primary;
+    }
+
+    .button-primary {
+        /* @apply rounded-full px-5 py-3 bg-primary-light dark:bg-primary-dark text-primary-dark dark:text-primary-light font-bold; */
+        @apply rounded-full px-5 py-3 bg-primary text-white font-bold;
+    }
+
+    .button-outline {
+        /* @apply rounded-full px-5 py-3 pb-2 border-2 border-primary-light dark:border-primary-dark text-primary-light dark:text-primary-dark font-bold; */
+        @apply rounded-full px-5 py-3 pb-2 border-2 border-primary text-primary font-bold;
+    }
+
+    .herotext-sm {
+        @apply text-4xl md:text-5xl;
+    }
+    .herotext-lg {
+        @apply text-3xl md:text-4xl;
+    }
+
+    .card {
+        @apply border rounded-3xl border-base-alt bg-base-alt overflow-hidden;
+    }
+
+
+
+
+    /* Timeline Container */
+    .timeline {
+        @apply my-[20px] mx-auto p-5;
+    }
+    
+    /* Card container */
+    .timeline-card {
+        /* @apply relative max-w-[600px] before:content-[''] before:absolute before:w-1/2 before:border-[5px] before:border-neutral-light-0 before:dark:border-neutral-dark-0; */
+        @apply relative max-w-[600px] before:content-[''] before:absolute before:w-1/2 before:border-[5px] before:border-base-alt;
+    }
+    
+    /* setting padding based on even or odd */
+    .timeline-card:nth-child(odd) {
+        @apply pt-8 pr-0 pb-8 pl-8;
+    }
+    .timeline-card:nth-child(even) {
+        @apply pt-8 pr-8 pb-8 pl-0;
+    }
+    
+    /* Setting the border of top, bottom, left */
+    .timeline-card:nth-child(odd)::before {
+        @apply left-0 top-[-5px] md:top-[-4.5px] bottom-[-5px] md:bottom-[-4.5px] border-y-[5px] border-t-[5px] border-r-0 rounded-l-[50px];
+    }
+    
+    /* Setting the border of top, bottom, right */
+    .timeline-card:nth-child(even)::before {
+        @apply right-0 top-0 bottom-0 border-y-[5px] border-l-0 rounded-r-[50px];
+    }
+    
+    /* Removing the border if it is the first card */
+    .timeline-card:first-child::before {
+        @apply border-t-0 rounded-tl-none;
+    }
+    
+    /* Removing the border if it is the last card  and it's odd */
+    .timeline-card:last-child:nth-child(odd)::before {
+        @apply border-b-0 rounded-bl-none;
+    }
+    
+    /* Removing the border if it is the last card  and it's even */
+    .timeline-card:last-child:nth-child(even)::before {
+        @apply border-b-0 rounded-br-none;
+    }
+    
+    /* Information about the timeline */
+    .timeline-info {
+        /* @apply flex flex-col bg-gradient-to-t from-surface-light-2 dark:from-surface-dark-2 text-neutral-light-5 dark:text-neutral-dark-5 rounded-[10px] p-[10px] border border-surface-light-3 dark:border-surface-dark-3; */
+        @apply flex flex-col bg-gradient-to-t from-base text-base rounded-[10px] p-[10px] border border-base;
+    }
+    
+    /* Title of the card */
+    .timeline-title {
+        /* @apply relative flex flex-row justify-between p-5 text-xl text-secondary-light-5 dark:text-secondary-dark-5; */
+        @apply relative flex flex-row justify-between p-5 text-xl text-secondary;
+    }
+    
+    /* Timeline dot  */
+    .timeline-title::before {
+        @apply content-[''] absolute w-[10px] h-[10px] bg-base rounded-full border-[3px] border-secondary;
+    }
+    
+    /* text right if the card is even  */
+    .timeline-card:nth-child(even) > .timeline-info > .timeline-title {
+        @apply text-right;
+    }
+    
+    /* setting dot to the left if the card is odd */
+    .timeline-card:nth-child(odd) > .timeline-info > .timeline-title::before {
+        @apply left-[-45px];
+    }
+    
+    /* setting dot to the right if the card is odd */
+    .timeline-card:nth-child(even) > .timeline-info > .timeline-title::before {
+        @apply right-[-45px];
+    }
+}
+
+@layer utilities {
+
+}

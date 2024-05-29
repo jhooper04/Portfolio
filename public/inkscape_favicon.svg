@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="180mm"
+   height="180mm"
+   viewBox="0 0 180 180"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="inkscape_favicon.svg"
+   inkscape:export-filename="favicon_16X16.png"
+   inkscape:export-xdpi="2.2577779"
+   inkscape:export-ydpi="2.2577779"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.57013889"
+     inkscape:cx="280.63337"
+     inkscape:cy="449.89038"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient8"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#00003e;stop-opacity:1;"
+         offset="0"
+         id="stop8" />
+      <stop
+         style="stop-color:#5d5d5d;stop-opacity:0;"
+         offset="1"
+         id="stop9" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8"
+       id="radialGradient9"
+       cx="89.797195"
+       cy="89.565163"
+       fx="89.797195"
+       fy="89.565163"
+       r="89.33313"
+       gradientTransform="matrix(0.97865822,-0.01795375,0.01420533,0.77433137,0.64413038,21.824245)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="opacity:1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:70.5556px;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI Heavy';white-space:pre;inline-size:95.0254;display:inline;opacity:1;fill:#000000;stroke-width:0.264583"
+       x="41.302071"
+       y="81.211937"
+       id="text8"
+       transform="matrix(1.8220862,0,0,2.3202648,-67.60037,-40.140337)"><tspan
+         x="41.302071"
+         y="81.211937"
+         id="tspan1">JH</tspan></text>
+    <ellipse
+       style="fill:url(#radialGradient9);stroke-width:0.264583"
+       id="path8"
+       cx="89.797195"
+       cy="89.565163"
+       rx="89.33313"
+       ry="89.565163" />
+  </g>
+</svg>
