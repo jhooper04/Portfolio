@@ -15,39 +15,41 @@ export default function BlogSection({posts, tags, categories}: Props) {
     var notFeatured = posts.filter((p) => !p.isFeatured);
 
     return (
-        <section className="pt-16" id="blog">
+        <section className="py-16" id="blog">
             <div className="w-full container mx-auto px-10">
                 <h2 className="text-2xl font-bold leading-tight text-left">Blog</h2>
-                <div className="grid grid-cols-3">
+                <div className="grid grid-cols-3 gap-3">
                     {featured.map((post) => (
-                        <div key={post.id} className="card">
-                            <h4>{post.title}</h4><span>{post.category.name}</span>
+                        <div key={post.id} className="card p-4">
+                            <h4 className="text-xl font-bold tracking-tighter">{post.title}</h4><span>{post.category.name}</span>
                             <p>
                                 {post.description}
                             </p>
                         </div>
                     ))}
-                    <div className="col-span-2">
+                    <div className="col-span-2 gap-3 flex flex-col">
                         {notFeatured.map((post) => (
-                            <div key={post.id} className="card col-span-3">
-                                <h4>{post.title}</h4><span>{post.category.name}</span>
+                            <div key={post.id} className="card p-4">
+                                <h4 className="text-lg font-bold">{post.title}</h4><span>{post.category.name}</span>
                                 <p>
                                     {post.description}
                                 </p>
                             </div>
                         ))}
                     </div>
-                    <div className="row-auto">
-                        {categories.map((category) => (
-                            <div key={category.id} className="">
-                                <Link href={'/blog/' + category.slug}>{category.name}</Link>
-                            </div>
-                        ))}
-                        {tags.map((tag) => (
-                            <div key={tag.id} className="">
-                                <Link href={'/blog/' + tag.slug}>{tag.name}</Link>
-                            </div>
-                        ))}
+                    <div className="row-auto card p-4">
+                        <h4 className="text-center text-lg font-bold tracking-tight">Categories</h4>
+                        <div  className="flex flex-row mt-4">
+                            {categories.map((category) => (
+                                <Link key={category.id} href={'/blog/' + category.slug} className="w-1/3">{category.name}</Link>
+                            ))}
+                        </div>
+                        <h4 className="mt-4 text-center text-lg font-bold">Tags</h4>
+                        <div className="flex flex-row mt-4">
+                            {tags.map((tag) => (
+                                <Link key={tag.id} href={'/blog/tag/' + tag.slug} className="w-1/3">{tag.name}</Link>
+                            ))}
+                        </div>
                     </div>
                 </div>
                 

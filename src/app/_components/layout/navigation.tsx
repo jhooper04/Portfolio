@@ -31,11 +31,11 @@ const Navigation = ({ }: Props) => {
                 </div>
 
                 <div className="hidden md:flex items-center gap-3" id="nav-content">
-                    <a className="inline-block navtext" href="#about">About</a>
-                    <a className="inline-block navtext" href="#experience">Experience</a>
-                    <a className="inline-block navtext" href="#projects">Projects</a>
-                    <a className="inline-block navtext" href="#blog">Blog</a>
-                    <a className="inline-block navtext" href="#contact">Contact</a>
+                    <a className="inline-block navtext" href="/#about">About</a>
+                    <a className="inline-block navtext" href="/#experience">Experience</a>
+                    <a className="inline-block navtext" href="/#projects">Projects</a>
+                    <a className="inline-block navtext" href="/blog">Blog</a>
+                    <a className="inline-block navtext" href="/#contact">Contact</a>
                 </div>
 
                 <div className="flex items-center" id="nav-content">

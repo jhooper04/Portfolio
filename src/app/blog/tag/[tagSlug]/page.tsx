@@ -6,9 +6,18 @@ import Footer from "components/layout/footer";
 import { ApiConfig, Category, Client, Post, Tag } from "lib/admin-api";
 import BlogSection from "app/_components/section/blog";
 
-export default async function Blog() {
+const client = new Client(new ApiConfig(process.env.API_KEY), process.env.SERVER_BASE_API_URL);
 
-    const client = new Client(new ApiConfig(process.env.API_KEY), process.env.SERVER_BASE_API_URL);
+export async function generateStaticParams() {
+
+    const tagsResponse = await await client.tagsList(1);
+
+    return tagsResponse.items.map((tag) => ({ tagSlug: tag.slug}));
+}
+
+export default async function BlogTag() {
+
+    
 
     let categories: Category[] = [];
     let tags: Tag[] = [];

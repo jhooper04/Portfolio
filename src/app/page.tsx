@@ -12,7 +12,7 @@ import { ApiConfig, Category, Client, Project, Tag, Post } from "lib/admin-api";
 
 export default async function Home() {
 
-    const client = new Client(new ApiConfig(process.env.API_KEY), "http://127.0.0.1:5000");
+    const client = new Client(new ApiConfig(process.env.API_KEY), process.env.SERVER_BASE_API_URL);
 
     let projects: Project[] = [];
     let categories: Category[] = [];
