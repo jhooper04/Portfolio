@@ -25,8 +25,6 @@ export default async function Home() {
         const tagsResponse = await await client.tagsList(1);
         const postsResponse = await client.postsList(1);
 
-        console.log(postsResponse);
-
         if (projectsResponse.items && projectsResponse.items.length > 0) {
             projects = projectsResponse.items;
         }

@@ -79,14 +79,13 @@ export class AuthorizedApiBase {
     protected transformResult(url: string, response: AxiosResponse, processor: (response: AxiosResponse) => any) {
         
         var authResponse = response.headers['www-authenticate'] || "";
-        console.log(authResponse);
+
         if (authResponse.indexOf('token expired') >= 0) {
             // user's token has expired
             // need to redirect to the login page
             this.config.loggedOutCallback();
         }
 
-        console.log("Service call: " + url, authResponse);
         return processor(response); 
     }
 }
