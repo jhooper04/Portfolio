@@ -13,11 +13,16 @@ export class ApiConfig {
 
     private _apiKey: string = "";
 
-    constructor(options: ApiOptions | null = null) {
-        if (options != null) {
-            this._apiKey = options.apiKey || "";
+    constructor(apiKey: string | null = null, loggedOutCallback: (()=>void) | null = null) {
+        if (apiKey != null) {
+            this._apiKey = apiKey;
+        }
+        if (loggedOutCallback != null) {
+            this.loggedOutCallback = loggedOutCallback;
         }
     }
+
+    loggedOutCallback = () => {}
 
     isAnonymous() {
         return !this.isApiKeyAuth() && !this.isJwtAuth();
@@ -78,4 +83,18 @@ export class AuthorizedApiBase {
         }
         return Promise.resolve(options);
     };
+
+    protected transformResult(url: string, response: AxiosResponse, processor: (response: AxiosResponse) => any) {
+        
+        var authResponse = response.headers['www-authenticate'] || "";
+        console.log(authResponse);
+        if (authResponse.indexOf('token expired') >= 0) {
+            // user's token has expired
+            // need to redirect to the login page
+            this.config.loggedOutCallback();
+        }
+
+        console.log("Service call: " + url, authResponse);
+        return processor(response); 
+    }
 }

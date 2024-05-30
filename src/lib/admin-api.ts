@@ -13,11 +13,16 @@ export class ApiConfig {
 
     private _apiKey: string = "";
 
-    constructor(options: ApiOptions | null = null) {
-        if (options != null) {
-            this._apiKey = options.apiKey || "";
+    constructor(apiKey: string | null = null, loggedOutCallback: (()=>void) | null = null) {
+        if (apiKey != null) {
+            this._apiKey = apiKey;
+        }
+        if (loggedOutCallback != null) {
+            this.loggedOutCallback = loggedOutCallback;
         }
     }
+
+    loggedOutCallback = () => {}
 
     isAnonymous() {
         return !this.isApiKeyAuth() && !this.isJwtAuth();
@@ -70,6 +75,20 @@ export class AuthorizedApiBase {
         }
         return Promise.resolve(options);
     };
+
+    protected transformResult(url: string, response: AxiosResponse, processor: (response: AxiosResponse) => any) {
+        
+        var authResponse = response.headers['www-authenticate'] || "";
+        console.log(authResponse);
+        if (authResponse.indexOf('token expired') >= 0) {
+            // user's token has expired
+            // need to redirect to the login page
+            this.config.loggedOutCallback();
+        }
+
+        console.log("Service call: " + url, authResponse);
+        return processor(response); 
+    }
 }
 
 export class Client extends AuthorizedApiBase {
@@ -122,7 +141,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAssetsUpload(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsUpload(_response));
         });
     }
 
@@ -180,7 +199,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAssetsGetAllFolders(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsGetAllFolders(_response));
         });
     }
 
@@ -265,7 +284,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAssetsList(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsList(_response));
         });
     }
 
@@ -348,7 +367,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAssetsGetByFolder(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsGetByFolder(_response));
         });
     }
 
@@ -409,7 +428,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAssetsGetById(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsGetById(_response));
         });
     }
 
@@ -475,7 +494,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAssetsUpdate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsUpdate(_response));
         });
     }
 
@@ -535,7 +554,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAssetsDelete(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsDelete(_response));
         });
     }
 
@@ -595,7 +614,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCategoriesCreate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processCategoriesCreate(_response));
         });
     }
 
@@ -673,7 +692,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCategoriesList(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processCategoriesList(_response));
         });
     }
 
@@ -734,7 +753,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCategoriesGetById(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processCategoriesGetById(_response));
         });
     }
 
@@ -800,7 +819,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCategoriesUpdate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processCategoriesUpdate(_response));
         });
     }
 
@@ -860,7 +879,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCategoriesDelete(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processCategoriesDelete(_response));
         });
     }
 
@@ -920,7 +939,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processMessagesSend(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processMessagesSend(_response));
         });
     }
 
@@ -998,7 +1017,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processMessagesList(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processMessagesList(_response));
         });
     }
 
@@ -1058,7 +1077,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processMessagesDelete(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processMessagesDelete(_response));
         });
     }
 
@@ -1118,7 +1137,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processPostsCreate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processPostsCreate(_response));
         });
     }
 
@@ -1196,7 +1215,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processPostsList(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processPostsList(_response));
         });
     }
 
@@ -1274,7 +1293,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processPostsFeatured(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processPostsFeatured(_response));
         });
     }
 
@@ -1335,7 +1354,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processPostsGetById(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processPostsGetById(_response));
         });
     }
 
@@ -1401,7 +1420,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processPostsUpdate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processPostsUpdate(_response));
         });
     }
 
@@ -1461,7 +1480,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processPostsDelete(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processPostsDelete(_response));
         });
     }
 
@@ -1521,7 +1540,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processProjectsCreate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processProjectsCreate(_response));
         });
     }
 
@@ -1599,7 +1618,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processProjectsList(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processProjectsList(_response));
         });
     }
 
@@ -1660,7 +1679,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processProjectsGetById(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processProjectsGetById(_response));
         });
     }
 
@@ -1726,7 +1745,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processProjectsUpdate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processProjectsUpdate(_response));
         });
     }
 
@@ -1786,7 +1805,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processProjectsDelete(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processProjectsDelete(_response));
         });
     }
 
@@ -1841,7 +1860,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSitesCreate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processSitesCreate(_response));
         });
     }
 
@@ -1914,7 +1933,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSitesList(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processSitesList(_response));
         });
     }
 
@@ -1970,7 +1989,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSitesGetById(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processSitesGetById(_response));
         });
     }
 
@@ -2031,7 +2050,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSitesUpdate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processSitesUpdate(_response));
         });
     }
 
@@ -2086,7 +2105,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSitesDelete(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processSitesDelete(_response));
         });
     }
 
@@ -2146,7 +2165,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processTagsCreate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processTagsCreate(_response));
         });
     }
 
@@ -2224,7 +2243,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processTagsList(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processTagsList(_response));
         });
     }
 
@@ -2285,7 +2304,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processTagsGetById(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processTagsGetById(_response));
         });
     }
 
@@ -2351,7 +2370,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processTagsUpdate(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processTagsUpdate(_response));
         });
     }
 
@@ -2411,7 +2430,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processTagsDelete(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processTagsDelete(_response));
         });
     }
 
@@ -2461,7 +2480,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processUsersSession(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processUsersSession(_response));
         });
     }
 
@@ -2518,7 +2537,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processUsersRegister(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processUsersRegister(_response));
         });
     }
 
@@ -2573,7 +2592,7 @@ export class Client extends AuthorizedApiBase {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processUsersLogin(_response);
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processUsersLogin(_response));
         });
     }
 
@@ -2618,6 +2637,7 @@ export class Asset implements IAsset {
     imageWidth!: string | null;
     imageHeight!: string | null;
     generateThumbnails!: boolean | null;
+    folderId!: number | null;
 
     constructor(data?: IAsset) {
         if (data) {
@@ -2645,6 +2665,7 @@ export class Asset implements IAsset {
             this.imageWidth = _data["imageWidth"] !== undefined ? _data["imageWidth"] : <any>null;
             this.imageHeight = _data["imageHeight"] !== undefined ? _data["imageHeight"] : <any>null;
             this.generateThumbnails = _data["generateThumbnails"] !== undefined ? _data["generateThumbnails"] : <any>null;
+            this.folderId = _data["folderId"] !== undefined ? _data["folderId"] : <any>null;
         }
     }
 
@@ -2672,6 +2693,7 @@ export class Asset implements IAsset {
         data["imageWidth"] = this.imageWidth !== undefined ? this.imageWidth : <any>null;
         data["imageHeight"] = this.imageHeight !== undefined ? this.imageHeight : <any>null;
         data["generateThumbnails"] = this.generateThumbnails !== undefined ? this.generateThumbnails : <any>null;
+        data["folderId"] = this.folderId !== undefined ? this.folderId : <any>null;
         return data;
     }
 }
@@ -2692,6 +2714,7 @@ export interface IAsset {
     imageWidth: string | null;
     imageHeight: string | null;
     generateThumbnails: boolean | null;
+    folderId: number | null;
 }
 
 export class AssetList implements IAssetList {

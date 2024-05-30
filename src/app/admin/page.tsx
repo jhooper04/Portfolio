@@ -12,14 +12,11 @@ import EditPostAdmin from "app/_components/admin/posts/edit-post";
 import ListMessagesAdmin from "app/_components/admin/messages/list-messages";
 
 let client: Client = null!;
-let loggedIn: boolean = false;
+//let loggedIn: boolean = false;
 
 if (typeof window !== 'undefined') {
 
-
-    const createClient = async () => {
-        client = await new Client(new ApiConfig(), "http://localhost:5000",);
-
+    const loggedOutCallback = async () => {
         if (window.location.href.indexOf('login') == -1) {
             const currentSession = await client.usersSession();
 
@@ -27,8 +24,16 @@ if (typeof window !== 'undefined') {
                 window.location.href = '/admin/login';
             }
 
-            loggedIn = false
+            console.log("logout ran");
         }
+    };
+
+    const createClient = async () => {
+        const config = new ApiConfig(null, loggedOutCallback);
+
+        client = await new Client(config, "http://localhost:5000");
+
+        loggedOutCallback();
     };
     createClient().catch(console.error);
 }
