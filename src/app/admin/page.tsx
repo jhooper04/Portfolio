@@ -9,6 +9,7 @@ import LoginAdmin from "app/_components/admin/login";
 import DashboardAdmin from "app/_components/admin/dashboard";
 import CreatePostAdmin from "app/_components/admin/posts/create-post";
 import EditPostAdmin from "app/_components/admin/posts/edit-post";
+import ListMessagesAdmin from "app/_components/admin/messages/list-messages";
 
 let client: Client = null!;
 let loggedIn: boolean = false;
@@ -22,11 +23,7 @@ if (typeof window !== 'undefined') {
         if (window.location.href.indexOf('login') == -1) {
             const currentSession = await client.usersSession();
 
-            console.log(currentSession);
-
             if (currentSession == null) {
-                console.log('here');
-
                 window.location.href = '/admin/login';
             }
 
@@ -60,6 +57,7 @@ export default function AdminPage() {
             <Router>
                 <main className="w-screen h-screen flex flex-row">
                     <div className="w-[250px]">
+                        <div><Link to="/admin">Dashboard</Link></div>
                         <div><Link to="/admin/assets">Assets</Link></div>
                         <div><Link to="/admin/posts">Posts</Link></div>
                         <div><Link to="/admin/messages">Messages</Link></div>
@@ -67,21 +65,22 @@ export default function AdminPage() {
                         <div><Link to="/admin/tags">Tags</Link></div>
                         <div><Link to="/admin/projects">Projects</Link></div>
                         <div><Link to="/admin/users">Users</Link></div>
+                        <div><Link to="/admin/logout">Logout</Link></div>
                     </div>
                     <div className="flex-grow">
                         <Routes>
                             <Route path="/admin/assets" element={<AssetsAdmin client={client} />} />
                                
-                            <Route path="/admin/posts" element={<ListPostsAdmin client={client} />}>
-                                <Route path="create" element={<CreatePostAdmin client={client} />} />
-                                <Route path=":postId" element={<EditPostAdmin client={client} />} />
-                            </Route>
-                            <Route path="/admin/messages" element={<h1>Messages</h1>} />
+                            <Route path="/admin/posts/create" element={<CreatePostAdmin client={client} />} />
+                            <Route path="/admin/posts/:postId" element={<EditPostAdmin client={client} />} />
+                            <Route path="/admin/posts" element={<ListPostsAdmin client={client} />} />
+                            <Route path="/admin/messages" element={<ListMessagesAdmin client={client} />} />
                             <Route path="/admin/categories" element={<h1>Categories</h1>} />
                             <Route path="/admin/tags" element={<h1>Tags</h1>} />
                             <Route path="/admin/projects" element={<h1>Projects</h1>} />
                             <Route path="/admin/users" element={<h1>Users</h1>} />
                             <Route path="/admin/login" element={<LoginAdmin client={client} />} />
+                            <Route path="/admin/logout" element={<LoginAdmin client={client} />} />
                             <Route path="/admin" element={<DashboardAdmin client={client} />} />
                         </Routes>
                     </div>

@@ -13,6 +13,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
+    "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "eslint": "^8",

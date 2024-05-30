@@ -47,7 +47,7 @@
       "useLeafType": false,
       "classTypes": [],
       "extendedClasses": [],
-      "extensionCode": "src/lib/authorized-api-base.ts",
+      "extensionCode": "../Portfolio3/portfolio/src/lib/authorized-api-base.ts",
       "generateDefaultValues": true,
       "excludedTypeNames": [],
       "excludedParameterNames": [],

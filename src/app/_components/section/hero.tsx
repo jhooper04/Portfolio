@@ -16,7 +16,7 @@ export default function HeroSection() {
 
                     <div className="mt-10 flex flex-row gap-3 justify-center md:justify-start md:mt-16">
                         <a className="button-primary" href="#">Resume</a>
-                        <a className="button-outline" href="#">Contact</a>
+                        <a className="button-outline" href="/#contact">Contact</a>
                     </div>
 
                     <div className="flex flex-col justify-center md:justify-start py-8 md:py-16 items-center md:items-start">
