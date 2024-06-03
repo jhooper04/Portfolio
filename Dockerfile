@@ -5,8 +5,9 @@ COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm install --production --silent && mv node_modules ../
 COPY . .
 RUN chown -R node /usr/src/app
-USER node
 
 RUN mkdir -p /usr/src/app/dist/out
+RUN chown -R node /user/src/app/dist/out
 
+USER node
 CMD ["npm", "run", "build"]
