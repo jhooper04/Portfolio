@@ -10,7 +10,6 @@ type Props = {
     params: { categorySlug: string, postSlug: string, postId: number },
 };
 
-console.log(process.env.SERVER_BASE_API_URL);
 const client = new Client(new ApiConfig(process.env.API_KEY), process.env.SERVER_BASE_API_URL);
 
 export async function generateStaticParams() {

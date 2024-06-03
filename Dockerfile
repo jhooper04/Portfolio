@@ -6,4 +6,5 @@ RUN npm install --production --silent && mv node_modules ../
 COPY . .
 RUN chown -R node /usr/src/app
 USER node
+RUN mkdir -p /usr/src/app/dist
 CMD ["npm", "run", "build"]
