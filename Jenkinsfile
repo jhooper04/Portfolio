@@ -6,7 +6,9 @@ pipeline {
                 withCredentials([file(credentialsId: 'portfolio-builder-env', variable: 'ENV_PATH')]) {
                     sh '''
                         cp $ENV_PATH .production.env
-                        docker compose -f docker-compose.yml -f docker-compose.production.yml --env-file .production.env up
+                        mv .production.env .env.production
+
+                        docker compose -f docker-compose.yml -f docker-compose.production.yml --env-file .env.production up
 
                         # Get the list of image names and their corresponding build numbers
                         images=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'portfolio-builder-' | sort -t'-' -k2 -n)
@@ -22,6 +24,9 @@ pipeline {
                           else 
                             echo "Keeping image: $image_name"
                           fi
+
+                        rm .env.production
+
                         done
                     '''
                 }
