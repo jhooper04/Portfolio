@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Client, ApiConfig } from 'lib/admin-api';
 import AssetsAdmin from "app/_components/admin/assets";
@@ -22,6 +22,14 @@ export default function AdminPage({apiBaseUrl}: Props) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const createClient = useCallback(async () => {
+        const config = new ApiConfig(null, loggedOutCallback);
+
+        client = await new Client(config, apiBaseUrl);
+
+        await loggedOutCallback();
+    }, [apiBaseUrl]);
+
     const loggedOutCallback = async () => {
         if (window.location.href.indexOf('login') == -1) {
             const currentSession = await client.usersSession();
@@ -32,17 +40,9 @@ export default function AdminPage({apiBaseUrl}: Props) {
         }
     };
 
-    const createClient = async () => {
-        const config = new ApiConfig(null, loggedOutCallback);
-
-        client = await new Client(config, apiBaseUrl);
-
-        await loggedOutCallback();
-    };
-
     useEffect(() => {
         createClient().then(()=>setLoading(false)).catch(console.error);
-    }, []);
+    }, [createClient]);
 
     if (loading) {
         return <h1>Loading...</h1>;

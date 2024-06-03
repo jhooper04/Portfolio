@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  builder:
+    environment: 
+      - NODE_ENV=development
+    volumes:
+      - ./dist:/usr/src/app/dist

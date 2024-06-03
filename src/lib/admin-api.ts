@@ -1668,6 +1668,70 @@ export class Client extends AuthorizedApiBase {
 
     /**
      * @param siteId (optional) 
+     * @return Success
+     */
+    postsGetBySlug(categorySlug: string, postSlug: string, siteId?: number | undefined, cancelToken?: CancelToken): Promise<Post> {
+        let url_ = this.baseUrl + "/posts/category/{categorySlug}/{postSlug}?";
+        if (categorySlug === undefined || categorySlug === null)
+            throw new Error("The parameter 'categorySlug' must be defined.");
+        url_ = url_.replace("{categorySlug}", encodeURIComponent("" + categorySlug));
+        if (postSlug === undefined || postSlug === null)
+            throw new Error("The parameter 'postSlug' must be defined.");
+        url_ = url_.replace("{postSlug}", encodeURIComponent("" + postSlug));
+        if (siteId === null)
+            throw new Error("The parameter 'siteId' cannot be null.");
+        else if (siteId !== undefined)
+            url_ += "siteId=" + encodeURIComponent("" + siteId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.instance.request(transformedOptions_);
+        }).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processPostsGetBySlug(_response));
+        });
+    }
+
+    protected processPostsGetBySlug(response: AxiosResponse): Promise<Post> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = Post.fromJS(resultData200);
+            return Promise.resolve<Post>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Post>(null as any);
+    }
+
+    /**
+     * @param siteId (optional) 
      * @param body (optional) 
      * @return Success
      */

@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  builder:
+    environment: 
+      - NODE_ENV=production
+    volumes:
+      - /var/www/jakehooper.pro:/usr/src/app/dist
