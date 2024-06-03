@@ -6,28 +6,39 @@ import Footer from "components/layout/footer";
 import { ApiConfig, Category, Client, Post, Tag } from "lib/admin-api";
 import BlogSection from "app/_components/section/blog";
 
+type Props = {
+    params: { tagSlug: string },
+};
+
 const client = new Client(new ApiConfig(process.env.API_KEY), process.env.SERVER_BASE_API_URL);
 
 export async function generateStaticParams() {
 
     const tagsResponse = await await client.tagsList(1);
 
+    //console.log(tagsResponse.items.map((tag) => ({ tagSlug: tag.slug})));
+
     return tagsResponse.items.map((tag) => ({ tagSlug: tag.slug}));
 }
 
-export default async function BlogTag() {
+export default async function BlogTag({ params: { tagSlug } }:Props) {
 
-    
+    //console.log(tagSlug);
 
+    let posts: Post[] = [];
     let categories: Category[] = [];
     let tags: Tag[] = [];
-    let posts: Post[] = [];
 
     try {
 
+        const postsResponse = await client.postsGetByTag(tagSlug, 1);
+
         const categoriesResponse = await client.categoriesList(1);
         const tagsResponse = await await client.tagsList(1);
-        const postsResponse = await client.postsList(1);
+
+        if (postsResponse.items && postsResponse.items.length > 0) {
+            posts = postsResponse.items;
+        }
 
         if (categoriesResponse.items && categoriesResponse.items.length > 0) {
             categories = categoriesResponse.items;
@@ -35,9 +46,8 @@ export default async function BlogTag() {
         if (tagsResponse.items && tagsResponse.items.length > 0) {
             tags = tagsResponse.items;
         }
-        if (postsResponse.items && postsResponse.items.length > 0) {
-            posts = postsResponse.items;
-        }
+
+        //console.log(posts);
     }
     catch(e) {
         console.error(e);

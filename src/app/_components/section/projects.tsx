@@ -1,15 +1,4 @@
-
-
-export type Project = {
-    id: number,
-    name: string,
-    description: string,
-    slug: string,
-    github: string | null,
-    demo: string | null,
-    image: string | null,
-    body: string | null,
-};
+import { Project } from "lib/admin-api";
 
 type Props = {
     projects: Project[];
