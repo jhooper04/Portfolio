@@ -25,7 +25,7 @@ pipeline {
                             echo "Keeping image: $image_name"
                           fi
 
-                        rm .env.production
+                        rm -fv ./.env.production
 
                         done
                     '''
