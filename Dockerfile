@@ -8,7 +8,7 @@ RUN chown -R node /usr/src/app
 
 RUN mkdir -p /usr/src/app/dist/out
 
-RUN chown -R nextjs:nodejs /usr/src/app/dist/out
+RUN chown -R node:node /usr/src/app/dist/out
 
 USER node
 CMD ["npm", "run", "build"]
