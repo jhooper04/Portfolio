@@ -5,4 +5,4 @@ services:
     environment: 
       - NODE_ENV=production
     volumes:
-      - /var/www/jakehooper.pro:/usr/src/app/dist
+      - /var/www/jakehooper.pro:/home/node/dist

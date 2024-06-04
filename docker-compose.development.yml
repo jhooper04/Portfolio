@@ -5,4 +5,4 @@ services:
     environment: 
       - NODE_ENV=development
     volumes:
-      - ./dist:/usr/src/app/dist
+      - ./dist:/home/node/dist
