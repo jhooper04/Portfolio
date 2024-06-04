@@ -27,6 +27,8 @@ pipeline {
 
                         rm -fv ./.env.production
 
+                        ls /var/www/jakehooper.pro/out
+
                         done
                     '''
                 }
