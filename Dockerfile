@@ -9,8 +9,8 @@ RUN addgroup -S nodejs --gid 2001
 RUN adduser -S nodejs -u 2001 -G nodejs
 
 RUN chown -R nodejs /usr/src/app
-RUN mkdir -p /home/nodejs/dist/out
-RUN chown -R nodejs /home/nodejs/dist
+RUN mkdir -p /usr/src/app/dist/out
+RUN chown -R nodejs /usr/src/app/dist
 
 USER nodejs
 CMD ["npm", "run", "build"] 

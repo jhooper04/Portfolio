@@ -18,6 +18,4 @@ if (process.env.NODE_ENV == 'development') {
     };
 }
 
-console.log(process.env.OUTPUT_DIR);
-
 export default nextConfig;
