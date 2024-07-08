@@ -1,13 +1,15 @@
+import classNames from "classnames";
 
 type Props = {
+    className: string,
 };
 
-const IconAnimated = ({ }: Props) => {
+const IconAnimated = ({ className }: Props) => {
     return (
-        <svg id="logo" width="100%" className="text-base" version="1.1" viewBox="0 0 969.95 265.95" xmlSpace="preserve" xmlns="http://www.w3.org/2000/svg">
+        <svg id="logo" width="100%" className={classNames('text-base', className)} version="1.1" viewBox="0 0 969.95 265.95" xmlSpace="preserve" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <filter id="glow">
-                    <feGaussianBlur stdDeviation="0.25" result="coloredBlur" />
+                    <feGaussianBlur stdDeviation="2.0" result="coloredBlur" />
                     <feMerge>
                         <feMergeNode in="coloredBlur" />
                         <feMergeNode in="SourceGraphic" />

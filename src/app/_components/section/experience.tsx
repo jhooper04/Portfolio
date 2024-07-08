@@ -61,17 +61,6 @@ export default function ExperienceSection() {
                                 </ul>
                             </div>
                         </div>
-                        <div className="timeline-card">
-                            <div className="timeline-info">
-                                <h3 className="timeline-title">Title 5</h3>
-                                <p className="timeline-desc"></p>
-                                <ul className="timeline-bullets">
-                                    <li>Worked within a team atmosphere to plan, develop, test, and maintain enterprise scale
-                                        administration and configuration web applications for laboratory information systems.</li>
-                                    <li>Helped train new developers on the company&apos;s processes and internal APIs</li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

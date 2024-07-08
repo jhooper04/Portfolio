@@ -19,8 +19,8 @@ const config: Config = {
     theme: {
         extend: {
             backgroundImage: {
-                "about-code-light": "linear-gradient(rgba(255,255,255,0.025), rgba(255,255,255,0.025)), url('/images/code.jpg')",
-                "about-code-dark": "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/code.jpg')",
+                "about-code-light": "linear-gradient(rgba(255,255,255,0.025), rgba(255,255,255,0.025)), url('/images/hero-circuit-3.jpg')",
+                "about-code-dark": "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/hero-circuit-3.jpg')",
             },
             // // this will generate utilities like `bg-base` and `bg-primary`
             // backgroundColor: {
