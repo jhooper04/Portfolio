@@ -5,12 +5,12 @@ COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm install --production --silent && mv node_modules ../
 COPY . .
 
-RUN addgroup -S nodegroup --gid 2001 
-RUN adduser -S nodejs -u 2001 -G nodegroup
+RUN addgroup -S nodejs --gid 2001 
+RUN adduser -S nodejs -u 2001 -G nodejs
 
 RUN chown -R nodejs /usr/src/app
-RUN mkdir -p /home/node/dist
-RUN chown -R nodejs /home/node/dist
+RUN mkdir -p /home/nodejs/dist/out
+RUN chown -R nodejs /home/nodejs/dist
 
 USER nodejs
 CMD ["npm", "run", "build"] 
