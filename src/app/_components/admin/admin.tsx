@@ -1,15 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
 import { Client, ApiConfig } from 'lib/admin-api';
-import AssetsAdmin from "app/_components/admin/assets";
 import ListPostsAdmin from "app/_components/admin/posts/list-posts";
 import LoginAdmin from "app/_components/admin/login";
-import DashboardAdmin from "app/_components/admin/dashboard";
+import DashboardAdmin from "app/_components/admin/dashboard/dashboard";
 import CreatePostAdmin from "app/_components/admin/posts/create-post";
 import EditPostAdmin from "app/_components/admin/posts/edit-post";
 import ListMessagesAdmin from "app/_components/admin/messages/list-messages";
+import ListAssetsAdmin from "./assets/list-assets";
+import CreateAssetAdmin from "./assets/create-asset";
+import CreateFolderAdmin from "./assets/create-folder";
+import AdminNavLink from "./admin-nav-link";
 
 let client: Client = null!;
 
@@ -55,20 +58,22 @@ export default function AdminPage({apiBaseUrl}: Props) {
         <>
             <Router>
                 <main className="w-screen h-screen flex flex-row">
-                    <div className="w-[250px]">
-                        <div><Link to="/admin">Dashboard</Link></div>
-                        <div><Link to="/admin/assets">Assets</Link></div>
-                        <div><Link to="/admin/posts">Posts</Link></div>
-                        <div><Link to="/admin/messages">Messages</Link></div>
-                        <div><Link to="/admin/categories">Categories</Link></div>
-                        <div><Link to="/admin/tags">Tags</Link></div>
-                        <div><Link to="/admin/projects">Projects</Link></div>
-                        <div><Link to="/admin/users">Users</Link></div>
-                        <div><Link to="/admin/logout">Logout</Link></div>
+                    <div className="w-[250px] py-3 border-r border-slate-700">
+                        <AdminNavLink to="/admin" end>Dashboard</AdminNavLink>
+                        <AdminNavLink to="/admin/assets">Assets</AdminNavLink>
+                        <AdminNavLink to="/admin/posts">Posts</AdminNavLink>
+                        <AdminNavLink to="/admin/messages">Messages</AdminNavLink>
+                        <AdminNavLink to="/admin/categories">Categories</AdminNavLink>
+                        <AdminNavLink to="/admin/tags">Tags</AdminNavLink>
+                        <AdminNavLink to="/admin/projects">Projects</AdminNavLink>
+                        <AdminNavLink to="/admin/users">Users</AdminNavLink>
+                        <AdminNavLink to="/admin/logout">Logout</AdminNavLink>
                     </div>
                     <div className="flex-grow">
                         <Routes>
-                            <Route path="/admin/assets" element={<AssetsAdmin client={client} />} />
+                            <Route path="/admin/assets/create" element={<CreateAssetAdmin client={client} />} />
+                            <Route path="/admin/assets/create-folder" element={<CreateFolderAdmin client={client} />} />
+                            <Route path="/admin/assets" element={<ListAssetsAdmin client={client} />} />
                                
                             <Route path="/admin/posts/create" element={<CreatePostAdmin client={client} />} />
                             <Route path="/admin/posts/:postId" element={<EditPostAdmin client={client} />} />

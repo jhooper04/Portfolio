@@ -1,5 +1,5 @@
 "use client";
-import { ApiConfig, AuthRequest, Client, setAuthorizationToken } from "lib/admin-api";
+import { ApiConfig, Auth, AuthRequest, Client, setAuthorizationToken } from "lib/admin-api";
 import { MouseEventHandler, useState } from "react";
 import { redirect } from "react-router-dom";
 
@@ -18,7 +18,16 @@ const LoginAdmin = ({client}:Props) => {
         setIsSubmitting(true);
 
         const loginAction = async () => {
-            const result = await client.usersLogin({ email: email, password: password } as AuthRequest);
+            let result: Auth;
+
+            try {
+                result = await client.usersLogin({ email: email, password: password } as AuthRequest);
+            }
+            catch {
+                setIsSubmitting(false);
+                result = new Auth();
+            }
+            
             return result;
         };
 

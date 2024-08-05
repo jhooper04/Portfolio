@@ -5,9 +5,6 @@ import axios, { AxiosError, AxiosHeaders, AxiosInstance, AxiosRequestConfig, Axi
  * The config is provided to the API client at initialization time.
  * API clients inherit from #AuthorizedApiBase and provide the config.
  */
-export type ApiOptions = {
-    apiKey: string | undefined,
-};
 
 export class ApiConfig {
 
