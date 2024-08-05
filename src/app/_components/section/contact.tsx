@@ -2,14 +2,17 @@
 import { MouseEventHandler, useState } from "react";
 import CircuitImage from "../svg/circuit";
 import { ApiConfig, ApiException, Client, MessageRequest, Message } from "lib/admin-api";
-import { AxiosError } from "axios";
+
+type Props = {
+    browserBaseApiUrl: string,
+}
 
 type Result = {
     succeeded: boolean,
     errors: string[],
 };
 
-export default function ContactSection() {
+export default function ContactSection({browserBaseApiUrl} : Props) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [body, setBody] = useState('');
@@ -39,7 +42,7 @@ export default function ContactSection() {
             return;
         }
 
-        const client = new Client(new ApiConfig, 'http://localhost:5000');
+        const client = new Client(new ApiConfig, browserBaseApiUrl);
 
         setIsSubmitting(true);
 
@@ -60,8 +63,6 @@ export default function ContactSection() {
                 return result;
             })
             .catch((error: ApiException )=> {
-
-                console.log(error.response);
                 if (error.response) {
                     const err = (error.response as unknown as Result).errors;
                     if (err) setError((error.response as unknown as Result).errors?.join(' '));

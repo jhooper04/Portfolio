@@ -54,7 +54,7 @@ export default async function Home() {
                     <ExperienceSection />
                     <ProjectsSection projects={projects} />
                     <BlogSection posts={posts} tags={tags} categories={categories} />
-                    <ContactSection />
+                    <ContactSection browserBaseApiUrl={process.env.BROWSER_BASE_API_URL || ""} />
                 </div>
             </main>
             <Footer />
