@@ -2,12 +2,9 @@
 import { ApiConfig, Auth, AuthRequest, Client, setAuthorizationToken } from "lib/admin-api";
 import { MouseEventHandler, useState } from "react";
 import { redirect } from "react-router-dom";
+import type { AdminPageProps } from "./common";
 
-type Props = {
-    client: Client,
-};
-
-const LoginAdmin = ({client}:Props) => {
+const LoginAdmin: React.FunctionComponent<AdminPageProps> = ({client}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);

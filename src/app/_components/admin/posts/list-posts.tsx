@@ -1,13 +1,10 @@
 "use client";
-import { Client, PostList } from "lib/admin-api";
+import type { AdminPageProps } from "app/_components/admin/common";
+import { PostList } from "lib/admin-api";
 import { useEffect, useState } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
-type Props = {
-    client: Client,
-};
-
-const ListPostsAdmin = ({ client }: Props) => {
+const ListPostsAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) => {
     const [posts, setPosts] = useState<PostList | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);

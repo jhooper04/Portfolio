@@ -1,13 +1,8 @@
 "use client";
-import { Client } from "lib/admin-api";
-import { useState } from "react";
+import { AdminPageProps } from "app/_components/admin/common";
 import { Link, useParams } from "react-router-dom";
 
-type Props = {
-    client: Client,
-};
-
-const EditPostAdmin = ({client}:Props) => {
+const EditPostAdmin: React.FunctionComponent<AdminPageProps> = ({client}) => {
     const { postId } = useParams();
     return (
         <div>

@@ -1,13 +1,9 @@
 "use client";
-import { Client, MessageList } from "lib/admin-api";
-import { MouseEventHandler, useEffect, useState } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import type { AdminPageProps } from "app/_components/admin/common";
+import { MessageList } from "lib/admin-api";
+import { useEffect, useState } from "react";
 
-type Props = {
-    client: Client,
-};
-
-const ListMessagesAdmin = ({ client }: Props) => {
+const ListMessagesAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) => {
     const [messages, setMessages] = useState<MessageList | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);

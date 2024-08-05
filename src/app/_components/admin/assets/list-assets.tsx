@@ -1,13 +1,10 @@
 "use client";
-import { Client, AssetList } from "lib/admin-api";
+import type { AdminPageProps } from "app/_components/admin/common";
+import { AssetList } from "lib/admin-api";
 import { useEffect, useState } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
-type Props = {
-    client: Client,
-};
-
-const ListAssetsAdmin = ({ client }: Props) => {
+const ListAssetsAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) => {
     const [assets, setAssets] = useState<AssetList | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);

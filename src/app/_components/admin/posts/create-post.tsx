@@ -1,12 +1,9 @@
 "use client";
+import type { AdminPageProps } from "app/_components/admin/common";
 import { Client } from "lib/admin-api";
 import { Link } from "react-router-dom";
 
-type Props = {
-    client: Client,
-};
-
-const CreatePostAdmin = ({client}:Props) => {
+const CreatePostAdmin: React.FunctionComponent<AdminPageProps> = ({}) => {
 
     return (
         <div>

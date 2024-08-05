@@ -37,7 +37,7 @@ export class AuthorizedApiBase {
         
         var authResponse = response.headers['www-authenticate'] || "";
 
-        if (authResponse.indexOf('token expired') >= 0) {
+        if (authResponse.indexOf('token expired') >= 0 || authResponse.indexOf("invalid_token") >= 0) {
             // user's token has expired
             // need to redirect to the login page
             this.config.loggedOutCallback();
@@ -4766,9 +4766,6 @@ function isAxiosError(obj: any): obj is AxiosError {
  * The config is provided to the API client at initialization time.
  * API clients inherit from #AuthorizedApiBase and provide the config.
  */
-// export type ApiOptions = {
-//     apiKey: string | undefined,
-// };
 
 export class ApiConfig {
 

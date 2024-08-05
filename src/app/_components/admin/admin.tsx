@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Client, ApiConfig } from 'lib/admin-api';
 import ListPostsAdmin from "app/_components/admin/posts/list-posts";
 import LoginAdmin from "app/_components/admin/login";
@@ -9,10 +9,15 @@ import DashboardAdmin from "app/_components/admin/dashboard/dashboard";
 import CreatePostAdmin from "app/_components/admin/posts/create-post";
 import EditPostAdmin from "app/_components/admin/posts/edit-post";
 import ListMessagesAdmin from "app/_components/admin/messages/list-messages";
-import ListAssetsAdmin from "./assets/list-assets";
-import CreateAssetAdmin from "./assets/create-asset";
-import CreateFolderAdmin from "./assets/create-folder";
-import AdminNavLink from "./admin-nav-link";
+import ListAssetsAdmin from "app/_components/admin/assets/list-assets";
+import CreateAssetAdmin from "app/_components/admin/assets/create-asset";
+import CreateFolderAdmin from "app/_components/admin/assets/create-folder";
+import AdminNavLink from "app/_components/admin/admin-nav-link";
+import LogoutAdmin from "app/_components/admin/logout";
+import ListCategoriesAdmin from "app/_components/admin/categories/list-categories";
+import ListTagsAdmin from "app/_components/admin/tags/list-tags";
+import ListProjectsAdmin from "app/_components/admin/projects/list-projects";
+import ListUsersAdmin from "app/_components/admin/users/list-users";
 
 let client: Client = null!;
 
@@ -20,8 +25,45 @@ type Props = {
     apiBaseUrl: string
 };
 
+type RouteInfo = {
+    name: string, 
+    component: (client: Client) => JSX.Element,
+    subroutes?: {[path: string]: RouteInfo},
+    hidden?: boolean,
+};
+
+const adminRoutes: {[path: string] : RouteInfo } = {
+    "/admin": { name: "Dashboard", component: (client) => (<DashboardAdmin client={client} />)},
+    "/admin/assets": { name: "Assets", component: (client) => (<ListAssetsAdmin client={client} />), subroutes: {
+        "/create": { name: "Upload Asset", component: (client) => (<CreateAssetAdmin client={client} />)},
+        "/create-folder": { name: "Create Folder", component: (client) => (<CreateFolderAdmin client={client} />)},
+    }},
+    "/admin/posts": { name: "Posts", component: (client) => (<ListPostsAdmin client={client} />), subroutes: {
+        "/create": { name: "Create New Post", component: (client) => (<CreatePostAdmin client={client} />)},
+        "/:postId": {name: "Edit Post", component: (client) => (<EditPostAdmin client={client} />)},
+    }},
+    "/admin/messages": { name: "Messages", component: (client) => (<ListMessagesAdmin client={client} />)},
+    "/admin/categories": { name: "Categories", component: (client) => (<ListCategoriesAdmin client={client} />)},
+    "/admin/tags": { name: "Tags", component: (client) => (<ListTagsAdmin client={client} />)},
+    "/admin/projects": { name: "Projects", component: (client) => (<ListProjectsAdmin client={client} />)},
+    "/admin/users": { name: "Users", component: (client) => (<ListUsersAdmin client={client} />)},
+    "/admin/login": { name: "Login", component: (client) => (<LoginAdmin client={client} />), hidden: true},
+    "/admin/logout": { name: "Logout", component: (client) => (<LogoutAdmin client={client} />)},
+};
+
+const flattenRoutes = (routes: { [path: string]: RouteInfo }, basePath = '') => {
+    let flatRoutes: { path: string; routeInfo: RouteInfo }[] = [];
+    Object.entries(routes).forEach(([path, routeInfo]) => {
+        const fullPath = `${basePath}${path}`;
+        flatRoutes.push({ path: fullPath, routeInfo });
+        if (routeInfo.subroutes) {
+            flatRoutes = flatRoutes.concat(flattenRoutes(routeInfo.subroutes, `${fullPath}`));
+        }
+    });
+    return flatRoutes;
+};
+
 export default function AdminPage({apiBaseUrl}: Props) {
-    //const [render, setRender] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -54,38 +96,22 @@ export default function AdminPage({apiBaseUrl}: Props) {
         return <p className="text-red-400">{error}</p>
     }
 
+    const flatRoutes = flattenRoutes(adminRoutes);
+
     return (
         <>
             <Router>
                 <main className="w-screen h-screen flex flex-row">
                     <div className="w-[250px] py-3 border-r border-slate-700">
-                        <AdminNavLink to="/admin" end>Dashboard</AdminNavLink>
-                        <AdminNavLink to="/admin/assets">Assets</AdminNavLink>
-                        <AdminNavLink to="/admin/posts">Posts</AdminNavLink>
-                        <AdminNavLink to="/admin/messages">Messages</AdminNavLink>
-                        <AdminNavLink to="/admin/categories">Categories</AdminNavLink>
-                        <AdminNavLink to="/admin/tags">Tags</AdminNavLink>
-                        <AdminNavLink to="/admin/projects">Projects</AdminNavLink>
-                        <AdminNavLink to="/admin/users">Users</AdminNavLink>
-                        <AdminNavLink to="/admin/logout">Logout</AdminNavLink>
+                        {Object.keys(adminRoutes).map((route) => !adminRoutes[route].hidden ? (
+                            <AdminNavLink key={route} to={route} end={route == "/admin"}>{adminRoutes[route].name}</AdminNavLink>
+                        ) : null)}
                     </div>
                     <div className="flex-grow">
                         <Routes>
-                            <Route path="/admin/assets/create" element={<CreateAssetAdmin client={client} />} />
-                            <Route path="/admin/assets/create-folder" element={<CreateFolderAdmin client={client} />} />
-                            <Route path="/admin/assets" element={<ListAssetsAdmin client={client} />} />
-                               
-                            <Route path="/admin/posts/create" element={<CreatePostAdmin client={client} />} />
-                            <Route path="/admin/posts/:postId" element={<EditPostAdmin client={client} />} />
-                            <Route path="/admin/posts" element={<ListPostsAdmin client={client} />} />
-                            <Route path="/admin/messages" element={<ListMessagesAdmin client={client} />} />
-                            <Route path="/admin/categories" element={<h1>Categories</h1>} />
-                            <Route path="/admin/tags" element={<h1>Tags</h1>} />
-                            <Route path="/admin/projects" element={<h1>Projects</h1>} />
-                            <Route path="/admin/users" element={<h1>Users</h1>} />
-                            <Route path="/admin/login" element={<LoginAdmin client={client} />} />
-                            <Route path="/admin/logout" element={<LoginAdmin client={client} />} />
-                            <Route path="/admin" element={<DashboardAdmin client={client} />} />
+                            {flatRoutes.map((route) => (
+                                <Route key={route.path} path={route.path} element={route.routeInfo.component(client)} />
+                            ))}
                         </Routes>
                     </div>
                 </main>

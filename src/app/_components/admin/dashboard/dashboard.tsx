@@ -1,14 +1,7 @@
 "use client";
-import { Client } from "lib/admin-api";
-import { useEffect, useState } from "react";
+import type { AdminPageProps } from "app/_components/admin/common";
 
-type Props = {
-    client: Client,
-};
-
-const DashboardAdmin = ({client}:Props) => {
-    
-
+const DashboardAdmin: React.FunctionComponent<AdminPageProps> = ({client}) => {
     
     return (
         <div>

@@ -1,4 +1,5 @@
 "use client";
+import type { AdminPageProps } from "app/_components/admin/common";
 import { Client, Folder, FolderRequest } from "lib/admin-api";
 import { MouseEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,7 +8,7 @@ type Props = {
     client: Client,
 };
 
-const CreateFolderAdmin = ({ client }: Props) => {
+const CreateFolderAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) => {
 
     const [name, setName] = useState('');
     const [slug, setSlug] = useState('');

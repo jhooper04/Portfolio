@@ -1,5 +1,6 @@
 "use client";
-import { Asset, AssetRequest, Client, FileParameter } from "lib/admin-api";
+import type { AdminPageProps } from "app/_components/admin/common";
+import { Asset, Client, FileParameter } from "lib/admin-api";
 import { ChangeEvent, MouseEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -7,7 +8,7 @@ type Props = {
     client: Client,
 };
 
-const CreateAssetAdmin = ({ client }: Props) => {
+const CreateAssetAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) => {
     const [file, setFile] = useState<FileParameter>();
     const [caption, setCaption] = useState('');
     const [description, setDescription] = useState('');
