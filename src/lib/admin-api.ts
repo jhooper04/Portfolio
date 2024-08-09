@@ -233,11 +233,14 @@ export class Client extends AuthorizedApiBase {
      * @param pageSize (optional) 
      * @param orderBy (optional) 
      * @param orderDesc (optional) 
-     * @param siteId (optional) 
      * @return OK
      */
-    assetsList(pageNumber?: number | undefined, pageSize?: number | undefined, orderBy?: string | undefined, orderDesc?: boolean | undefined, siteId?: number | undefined, cancelToken?: CancelToken): Promise<AssetList> {
+    assetsList(siteId: number, pageNumber?: number | undefined, pageSize?: number | undefined, orderBy?: string | undefined, orderDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<AssetList> {
         let url_ = this.baseUrl + "/assets/all?";
+        if (siteId === undefined || siteId === null)
+            throw new Error("The parameter 'siteId' must be defined and cannot be null.");
+        else
+            url_ += "siteId=" + encodeURIComponent("" + siteId) + "&";
         if (pageNumber === null)
             throw new Error("The parameter 'pageNumber' cannot be null.");
         else if (pageNumber !== undefined)
@@ -254,10 +257,6 @@ export class Client extends AuthorizedApiBase {
             throw new Error("The parameter 'orderDesc' cannot be null.");
         else if (orderDesc !== undefined)
             url_ += "OrderDesc=" + encodeURIComponent("" + orderDesc) + "&";
-        if (siteId === null)
-            throw new Error("The parameter 'siteId' cannot be null.");
-        else if (siteId !== undefined)
-            url_ += "siteId=" + encodeURIComponent("" + siteId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -3117,6 +3116,7 @@ export interface IAssetList {
 }
 
 export class AssetRequest implements IAssetRequest {
+    filename!: string | null;
     caption!: string | null;
     description!: string | null;
     accessRoles!: string | null;
@@ -3136,6 +3136,7 @@ export class AssetRequest implements IAssetRequest {
 
     init(_data?: any) {
         if (_data) {
+            this.filename = _data["filename"] !== undefined ? _data["filename"] : <any>null;
             this.caption = _data["caption"] !== undefined ? _data["caption"] : <any>null;
             this.description = _data["description"] !== undefined ? _data["description"] : <any>null;
             this.accessRoles = _data["accessRoles"] !== undefined ? _data["accessRoles"] : <any>null;
@@ -3155,6 +3156,7 @@ export class AssetRequest implements IAssetRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["filename"] = this.filename !== undefined ? this.filename : <any>null;
         data["caption"] = this.caption !== undefined ? this.caption : <any>null;
         data["description"] = this.description !== undefined ? this.description : <any>null;
         data["accessRoles"] = this.accessRoles !== undefined ? this.accessRoles : <any>null;
@@ -3167,6 +3169,7 @@ export class AssetRequest implements IAssetRequest {
 }
 
 export interface IAssetRequest {
+    filename: string | null;
     caption: string | null;
     description: string | null;
     accessRoles: string | null;
