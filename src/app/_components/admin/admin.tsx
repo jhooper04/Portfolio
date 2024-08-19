@@ -18,6 +18,7 @@ import ListCategoriesAdmin from "app/_components/admin/categories/list-categorie
 import ListTagsAdmin from "app/_components/admin/tags/list-tags";
 import ListProjectsAdmin from "app/_components/admin/projects/list-projects";
 import ListUsersAdmin from "app/_components/admin/users/list-users";
+import { RouteInfo } from "./common";
 
 let client: Client = null!;
 
@@ -25,39 +26,36 @@ type Props = {
     apiBaseUrl: string
 };
 
-type RouteInfo = {
-    name: string, 
-    component: (client: Client) => JSX.Element,
-    subroutes?: {[path: string]: RouteInfo},
-    hidden?: boolean,
-};
-
 const adminRoutes: {[path: string] : RouteInfo } = {
-    "/admin": { name: "Dashboard", component: (client) => (<DashboardAdmin client={client} />)},
-    "/admin/assets": { name: "Assets", component: (client) => (<ListAssetsAdmin client={client} />), subroutes: {
-        "/create": { name: "Upload Asset", component: (client) => (<CreateAssetAdmin client={client} />)},
-        "/create-folder": { name: "Create Folder", component: (client) => (<CreateFolderAdmin client={client} />)},
+    "/admin": { name: "Dashboard", component: (client, routes) => (<DashboardAdmin client={client} routes={routes} />)},
+    "/admin/assets": { name: "Assets", component: (client, routes) => (<ListAssetsAdmin client={client} routes={routes} />), subroutes: {
+        "/create": { name: "Upload Asset", component: (client, routes) => (<CreateAssetAdmin client={client} routes={routes} />)},
+        "/create-folder": { name: "Create Folder", component: (client, routes) => (<CreateFolderAdmin client={client} routes={routes} />)},
     }},
-    "/admin/posts": { name: "Posts", component: (client) => (<ListPostsAdmin client={client} />), subroutes: {
-        "/create": { name: "Create New Post", component: (client) => (<CreatePostAdmin client={client} />)},
-        "/:postId": {name: "Edit Post", component: (client) => (<EditPostAdmin client={client} />)},
+    "/admin/posts": { name: "Posts", component: (client, routes) => (<ListPostsAdmin client={client} routes={routes} />), subroutes: {
+        "/create": { name: "Create New Post", component: (client, routes) => (<CreatePostAdmin client={client} routes={routes} />)},
+        "/:postId": {name: "Edit Post", component: (client, routes) => (<EditPostAdmin client={client} routes={routes} />)},
     }},
-    "/admin/messages": { name: "Messages", component: (client) => (<ListMessagesAdmin client={client} />)},
-    "/admin/categories": { name: "Categories", component: (client) => (<ListCategoriesAdmin client={client} />)},
-    "/admin/tags": { name: "Tags", component: (client) => (<ListTagsAdmin client={client} />)},
-    "/admin/projects": { name: "Projects", component: (client) => (<ListProjectsAdmin client={client} />)},
-    "/admin/users": { name: "Users", component: (client) => (<ListUsersAdmin client={client} />)},
-    "/admin/login": { name: "Login", component: (client) => (<LoginAdmin client={client} />), hidden: true},
-    "/admin/logout": { name: "Logout", component: (client) => (<LogoutAdmin client={client} />)},
+    "/admin/messages": { name: "Messages", component: (client, routes) => (<ListMessagesAdmin client={client} routes={routes} />)},
+    "/admin/categories": { name: "Categories", component: (client, routes) => (<ListCategoriesAdmin client={client} routes={routes} />)},
+    "/admin/tags": { name: "Tags", component: (client, routes) => (<ListTagsAdmin client={client} routes={routes} />)},
+    "/admin/projects": { name: "Projects", component: (client, routes) => (<ListProjectsAdmin client={client} routes={routes} />)},
+    "/admin/users": { name: "Users", component: (client, routes) => (<ListUsersAdmin client={client} routes={routes} />)},
+    "/admin/login": { name: "Login", component: (client, routes) => (<LoginAdmin client={client} routes={routes} />), hidden: true},
+    "/admin/logout": { name: "Logout", component: (client, routes) => (<LogoutAdmin client={client} routes={routes} />)},
 };
 
-const flattenRoutes = (routes: { [path: string]: RouteInfo }, basePath = '') => {
-    let flatRoutes: { path: string; routeInfo: RouteInfo }[] = [];
+const flattenRoutes = (routes: { [path: string]: RouteInfo }, basePath = ''): { [path: string]: RouteInfo } => {
+    let flatRoutes: { [path: string]: RouteInfo } = {};
     Object.entries(routes).forEach(([path, routeInfo]) => {
         const fullPath = `${basePath}${path}`;
-        flatRoutes.push({ path: fullPath, routeInfo });
+        flatRoutes[fullPath] = routeInfo;
         if (routeInfo.subroutes) {
-            flatRoutes = flatRoutes.concat(flattenRoutes(routeInfo.subroutes, `${fullPath}`));
+            //flatRoutes = flatRoutes.concat();
+            let subFlatRoutes = flattenRoutes(routeInfo.subroutes, `${fullPath}`);
+            Object.entries(subFlatRoutes).forEach(([subpath, subRouteInfo]) => {
+                flatRoutes[subpath] = subRouteInfo;
+            });
         }
     });
     return flatRoutes;
@@ -109,8 +107,8 @@ export default function AdminPage({apiBaseUrl}: Props) {
                     </div>
                     <div className="flex-grow">
                         <Routes>
-                            {flatRoutes.map((route) => (
-                                <Route key={route.path} path={route.path} element={route.routeInfo.component(client)} />
+                            {Object.entries(flatRoutes).map((keyValue) => (
+                                <Route key={keyValue[0]} path={keyValue[0]} element={keyValue[1].component(client, flatRoutes)} />
                             ))}
                         </Routes>
                     </div>

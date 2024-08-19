@@ -3,8 +3,9 @@ import type { AdminPageProps } from "app/_components/admin/common";
 import { AssetList } from "lib/admin-api";
 import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import Breadcrumbs from "../bread-crumbs";
 
-const ListAssetsAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) => {
+const ListAssetsAdmin: React.FunctionComponent<AdminPageProps> = ({ client, routes }) => {
     const [assets, setAssets] = useState<AssetList | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -20,7 +21,9 @@ const ListAssetsAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) =>
     }, [client]);
     return (
         <div>
-            <h1 className="pb-4 mb-4">Listing all assets</h1>
+            <h1 className="pb-4 mb-4">Asset Manager</h1>
+            <Breadcrumbs routes={routes} />
+            
             <Link className="button-outline" to="create">Create Asset</Link>
             <Link className="button-outline" to="create-folder">Create Folder</Link>
             <p className="mt-4">here is a asset list</p>
