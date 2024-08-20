@@ -1,9 +1,11 @@
+"use client";
 import { Client, Folder } from 'lib/admin-api';
 import { useState } from 'react';
 import { SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 
 type Props = {
+    id: string,
     client: Client,
     value: FolderOption | null,
     onChange: (value: FolderOption | null) => void,
@@ -15,7 +17,7 @@ export type FolderOption = {
     children?: FolderOption[],
 };
 
-const FolderSelectAdmin: React.FunctionComponent<Props> = ({ client, value, onChange }) => {
+const FolderSelectAdmin: React.FunctionComponent<Props> = ({ id, client, value, onChange }) => {
     const [selectedValue, setSelectedValue] = useState<FolderOption | null>(null);
     
     const loadOptions = (inputValue: string) =>
@@ -48,7 +50,7 @@ const FolderSelectAdmin: React.FunctionComponent<Props> = ({ client, value, onCh
     };
 
     return (
-        <AsyncSelect cacheOptions defaultOptions loadOptions={loadOptions} onChange={handleSelectChange} value={selectedValue} />
+        <AsyncSelect id={id} cacheOptions defaultOptions loadOptions={loadOptions} onChange={handleSelectChange} value={selectedValue} />
     );
 }
 

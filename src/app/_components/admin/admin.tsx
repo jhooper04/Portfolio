@@ -10,8 +10,8 @@ import CreatePostAdmin from "app/_components/admin/posts/create-post";
 import EditPostAdmin from "app/_components/admin/posts/edit-post";
 import ListMessagesAdmin from "app/_components/admin/messages/list-messages";
 import ListAssetsAdmin from "app/_components/admin/assets/list-assets";
-import CreateAssetAdmin from "app/_components/admin/assets/create-asset";
-import CreateFolderAdmin from "app/_components/admin/assets/create-folder";
+import EditAssetAdmin from "app/_components/admin/assets/edit-asset";
+import EditFolderAdmin from "app/_components/admin/assets/edit-folder";
 import AdminNavLink from "app/_components/admin/admin-nav-link";
 import LogoutAdmin from "app/_components/admin/logout";
 import ListCategoriesAdmin from "app/_components/admin/categories/list-categories";
@@ -29,8 +29,10 @@ type Props = {
 const adminRoutes: {[path: string] : RouteInfo } = {
     "/admin": { name: "Dashboard", component: (client, routes) => (<DashboardAdmin client={client} routes={routes} />)},
     "/admin/assets": { name: "Assets", component: (client, routes) => (<ListAssetsAdmin client={client} routes={routes} />), subroutes: {
-        "/create": { name: "Upload Asset", component: (client, routes) => (<CreateAssetAdmin client={client} routes={routes} />)},
-        "/create-folder": { name: "Create Folder", component: (client, routes) => (<CreateFolderAdmin client={client} routes={routes} />)},
+        "/create": { name: "Upload Asset", component: (client, routes) => (<EditAssetAdmin client={client} routes={routes} />)},
+        "/edit/:assetId": { name: "Edit Asset", component: (client, routes) => (<EditAssetAdmin client={client} routes={routes} />)},
+        "/create-folder": { name: "Create Folder", component: (client, routes) => (<EditFolderAdmin client={client} routes={routes} />)},
+        "/edit-folder/:folderId": { name: "Edit Folder", component: (client, routes) => (<EditFolderAdmin client={client} routes={routes} />)},
     }},
     "/admin/posts": { name: "Posts", component: (client, routes) => (<ListPostsAdmin client={client} routes={routes} />), subroutes: {
         "/create": { name: "Create New Post", component: (client, routes) => (<CreatePostAdmin client={client} routes={routes} />)},

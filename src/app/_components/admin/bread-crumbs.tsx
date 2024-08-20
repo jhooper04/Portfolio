@@ -8,7 +8,8 @@ type Props = {
 
 const Breadcrumbs: FunctionComponent<Props> = ({ routes }) => {
   const location = useLocation();
-  const pathnames = location.pathname.split('/').filter(x => x && x != 'admin');
+  const currentRoute = location.pathname.endsWith('/') ? location.pathname.substring(0, location.pathname.length-1) : location.pathname;
+  const pathnames = currentRoute.split('/').filter(x => x && x != 'admin');
 
   const getDisplayName = (pathname: string) => {
     // Handle dynamic routes like /user/:id
@@ -35,6 +36,7 @@ const Breadcrumbs: FunctionComponent<Props> = ({ routes }) => {
           </span>
         );
       })}
+      <span>{ routes[currentRoute].name }</span>
     </nav>
   );
 };

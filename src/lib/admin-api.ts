@@ -164,71 +164,6 @@ export class Client extends AuthorizedApiBase {
     }
 
     /**
-     * @param siteId (optional) 
-     * @return OK
-     */
-    assetsGetAllFolders(siteId?: number | undefined, cancelToken?: CancelToken): Promise<Folder[]> {
-        let url_ = this.baseUrl + "/assets?";
-        if (siteId === null)
-            throw new Error("The parameter 'siteId' cannot be null.");
-        else if (siteId !== undefined)
-            url_ += "siteId=" + encodeURIComponent("" + siteId) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.instance.request(transformedOptions_);
-        }).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsGetAllFolders(_response));
-        });
-    }
-
-    protected processAssetsGetAllFolders(response: AxiosResponse): Promise<Folder[]> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(Folder.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return Promise.resolve<Folder[]>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<Folder[]>(null as any);
-    }
-
-    /**
      * @param pageNumber (optional) 
      * @param pageSize (optional) 
      * @param orderBy (optional) 
@@ -236,7 +171,7 @@ export class Client extends AuthorizedApiBase {
      * @return OK
      */
     assetsList(siteId: number, pageNumber?: number | undefined, pageSize?: number | undefined, orderBy?: string | undefined, orderDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<AssetList> {
-        let url_ = this.baseUrl + "/assets/all?";
+        let url_ = this.baseUrl + "/assets?";
         if (siteId === undefined || siteId === null)
             throw new Error("The parameter 'siteId' must be defined and cannot be null.");
         else
@@ -633,6 +568,71 @@ export class Client extends AuthorizedApiBase {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param siteId (optional) 
+     * @return OK
+     */
+    assetsGetAllFolders(siteId?: number | undefined, cancelToken?: CancelToken): Promise<Folder[]> {
+        let url_ = this.baseUrl + "/assets/folders?";
+        if (siteId === null)
+            throw new Error("The parameter 'siteId' cannot be null.");
+        else if (siteId !== undefined)
+            url_ += "siteId=" + encodeURIComponent("" + siteId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.instance.request(transformedOptions_);
+        }).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processAssetsGetAllFolders(_response));
+        });
+    }
+
+    protected processAssetsGetAllFolders(response: AxiosResponse): Promise<Folder[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Folder.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<Folder[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Folder[]>(null as any);
     }
 
     /**
@@ -2956,19 +2956,19 @@ export class Asset implements IAsset {
     id!: number;
     siteId!: number;
     created!: Date;
-    createdBy!: string | null;
+    createdBy?: string | null;
     lastModified!: Date;
-    lastModifiedBy!: string | null;
+    lastModifiedBy?: string | null;
     filename!: string;
     assetPath!: string;
     caption!: string;
     description!: string;
     type!: string;
-    accessRoles!: string | null;
-    imageWidth!: string | null;
-    imageHeight!: string | null;
-    generateThumbnails!: boolean | null;
-    folderId!: number | null;
+    accessRoles?: string | null;
+    imageWidth?: string | null;
+    imageHeight?: string | null;
+    generateThumbnails?: boolean | null;
+    folderId?: number | null;
 
     constructor(data?: IAsset) {
         if (data) {
@@ -3033,23 +3033,23 @@ export interface IAsset {
     id: number;
     siteId: number;
     created: Date;
-    createdBy: string | null;
+    createdBy?: string | null;
     lastModified: Date;
-    lastModifiedBy: string | null;
+    lastModifiedBy?: string | null;
     filename: string;
     assetPath: string;
     caption: string;
     description: string;
     type: string;
-    accessRoles: string | null;
-    imageWidth: string | null;
-    imageHeight: string | null;
-    generateThumbnails: boolean | null;
-    folderId: number | null;
+    accessRoles?: string | null;
+    imageWidth?: string | null;
+    imageHeight?: string | null;
+    generateThumbnails?: boolean | null;
+    folderId?: number | null;
 }
 
 export class AssetList implements IAssetList {
-    items!: Asset[];
+    items?: Asset[];
     pageNumber!: number;
     readonly totalPages!: number;
     readonly totalCount!: number;
@@ -3107,7 +3107,7 @@ export class AssetList implements IAssetList {
 }
 
 export interface IAssetList {
-    items: Asset[];
+    items?: Asset[];
     pageNumber: number;
     totalPages: number;
     totalCount: number;
@@ -3116,14 +3116,14 @@ export interface IAssetList {
 }
 
 export class AssetRequest implements IAssetRequest {
-    filename!: string | null;
-    caption!: string | null;
-    description!: string | null;
-    accessRoles!: string | null;
-    imageWidth!: number | null;
-    imageHeight!: number | null;
-    generateThumbnails!: boolean | null;
-    folderId!: number | null;
+    filename?: string | null;
+    caption?: string | null;
+    description?: string | null;
+    accessRoles?: string | null;
+    imageWidth?: number | null;
+    imageHeight?: number | null;
+    generateThumbnails?: boolean | null;
+    folderId?: number | null;
 
     constructor(data?: IAssetRequest) {
         if (data) {
@@ -3169,20 +3169,20 @@ export class AssetRequest implements IAssetRequest {
 }
 
 export interface IAssetRequest {
-    filename: string | null;
-    caption: string | null;
-    description: string | null;
-    accessRoles: string | null;
-    imageWidth: number | null;
-    imageHeight: number | null;
-    generateThumbnails: boolean | null;
-    folderId: number | null;
+    filename?: string | null;
+    caption?: string | null;
+    description?: string | null;
+    accessRoles?: string | null;
+    imageWidth?: number | null;
+    imageHeight?: number | null;
+    generateThumbnails?: boolean | null;
+    folderId?: number | null;
 }
 
 export class Auth implements IAuth {
-    username!: string | null;
-    email!: string | null;
-    token!: string | null;
+    username?: string | null;
+    email?: string | null;
+    token?: string | null;
 
     constructor(data?: IAuth) {
         if (data) {
@@ -3218,14 +3218,14 @@ export class Auth implements IAuth {
 }
 
 export interface IAuth {
-    username: string | null;
-    email: string | null;
-    token: string | null;
+    username?: string | null;
+    email?: string | null;
+    token?: string | null;
 }
 
 export class AuthRequest implements IAuthRequest {
-    email!: string | null;
-    password!: string | null;
+    email?: string | null;
+    password?: string | null;
 
     constructor(data?: IAuthRequest) {
         if (data) {
@@ -3259,23 +3259,23 @@ export class AuthRequest implements IAuthRequest {
 }
 
 export interface IAuthRequest {
-    email: string | null;
-    password: string | null;
+    email?: string | null;
+    password?: string | null;
 }
 
 export class Category implements ICategory {
     id!: number;
     siteId!: number;
     created!: Date;
-    createdBy!: string | null;
+    createdBy?: string | null;
     lastModified!: Date;
-    lastModifiedBy!: string | null;
+    lastModifiedBy?: string | null;
     name!: string;
     description!: string;
-    slug!: string;
-    banner!: string | null;
-    icon!: string | null;
-    body!: string | null;
+    slug?: string;
+    banner?: string | null;
+    icon?: string | null;
+    body?: string | null;
 
     constructor(data?: ICategory) {
         if (data) {
@@ -3332,19 +3332,19 @@ export interface ICategory {
     id: number;
     siteId: number;
     created: Date;
-    createdBy: string | null;
+    createdBy?: string | null;
     lastModified: Date;
-    lastModifiedBy: string | null;
+    lastModifiedBy?: string | null;
     name: string;
     description: string;
-    slug: string;
-    banner: string | null;
-    icon: string | null;
-    body: string | null;
+    slug?: string;
+    banner?: string | null;
+    icon?: string | null;
+    body?: string | null;
 }
 
 export class CategoryList implements ICategoryList {
-    items!: Category[];
+    items?: Category[];
     pageNumber!: number;
     readonly totalPages!: number;
     readonly totalCount!: number;
@@ -3402,7 +3402,7 @@ export class CategoryList implements ICategoryList {
 }
 
 export interface ICategoryList {
-    items: Category[];
+    items?: Category[];
     pageNumber: number;
     totalPages: number;
     totalCount: number;
@@ -3411,12 +3411,12 @@ export interface ICategoryList {
 }
 
 export class CategoryRequest implements ICategoryRequest {
-    name!: string | null;
-    description!: string | null;
-    slug!: string;
-    banner!: string | null;
-    icon!: string | null;
-    body!: string | null;
+    name?: string | null;
+    description?: string | null;
+    slug?: string;
+    banner?: string | null;
+    icon?: string | null;
+    body?: string | null;
 
     constructor(data?: ICategoryRequest) {
         if (data) {
@@ -3458,12 +3458,12 @@ export class CategoryRequest implements ICategoryRequest {
 }
 
 export interface ICategoryRequest {
-    name: string | null;
-    description: string | null;
-    slug: string;
-    banner: string | null;
-    icon: string | null;
-    body: string | null;
+    name?: string | null;
+    description?: string | null;
+    slug?: string;
+    banner?: string | null;
+    icon?: string | null;
+    body?: string | null;
 }
 
 export class CurrentSession implements ICurrentSession {
@@ -3510,15 +3510,15 @@ export class Folder implements IFolder {
     id!: number;
     siteId!: number;
     created!: Date;
-    createdBy!: string | null;
+    createdBy?: string | null;
     lastModified!: Date;
-    lastModifiedBy!: string | null;
+    lastModifiedBy?: string | null;
     name!: string;
-    slug!: string | null;
-    accessRoles!: string | null;
-    parentFolderId!: number | null;
-    parentFolder!: Folder;
-    subFolders!: Folder[];
+    slug?: string | null;
+    accessRoles?: string | null;
+    parentFolderId?: number | null;
+    parentFolder?: Folder;
+    subFolders?: Folder[];
 
     constructor(data?: IFolder) {
         if (data) {
@@ -3586,22 +3586,22 @@ export interface IFolder {
     id: number;
     siteId: number;
     created: Date;
-    createdBy: string | null;
+    createdBy?: string | null;
     lastModified: Date;
-    lastModifiedBy: string | null;
+    lastModifiedBy?: string | null;
     name: string;
-    slug: string | null;
-    accessRoles: string | null;
-    parentFolderId: number | null;
-    parentFolder: Folder;
-    subFolders: Folder[];
+    slug?: string | null;
+    accessRoles?: string | null;
+    parentFolderId?: number | null;
+    parentFolder?: Folder;
+    subFolders?: Folder[];
 }
 
 export class FolderRequest implements IFolderRequest {
     name!: string;
-    slug!: string | null;
-    accessRoles!: string | null;
-    parentFolderId!: number | null;
+    slug?: string | null;
+    accessRoles?: string | null;
+    parentFolderId?: number | null;
 
     constructor(data?: IFolderRequest) {
         if (data) {
@@ -3640,9 +3640,9 @@ export class FolderRequest implements IFolderRequest {
 
 export interface IFolderRequest {
     name: string;
-    slug: string | null;
-    accessRoles: string | null;
-    parentFolderId: number | null;
+    slug?: string | null;
+    accessRoles?: string | null;
+    parentFolderId?: number | null;
 }
 
 export class Message implements IMessage {
@@ -3702,7 +3702,7 @@ export interface IMessage {
 }
 
 export class MessageList implements IMessageList {
-    items!: Message[];
+    items?: Message[];
     pageNumber!: number;
     readonly totalPages!: number;
     readonly totalCount!: number;
@@ -3760,7 +3760,7 @@ export class MessageList implements IMessageList {
 }
 
 export interface IMessageList {
-    items: Message[];
+    items?: Message[];
     pageNumber: number;
     totalPages: number;
     totalCount: number;
@@ -3816,24 +3816,24 @@ export class Post implements IPost {
     id!: number;
     siteId!: number;
     created!: Date;
-    createdBy!: string | null;
+    createdBy?: string | null;
     lastModified!: Date;
-    lastModifiedBy!: string | null;
+    lastModifiedBy?: string | null;
     title!: string;
-    description!: string;
-    slug!: string | null;
+    description?: string;
+    slug?: string | null;
     author!: string;
-    authorAvatar!: string | null;
-    image!: string | null;
-    ogImage!: string | null;
-    ogTitle!: string | null;
-    ogType!: string | null;
+    authorAvatar?: string | null;
+    image?: string | null;
+    ogImage?: string | null;
+    ogTitle?: string | null;
+    ogType?: string | null;
     body!: string;
     publishDate!: Date;
     isFeatured!: boolean;
-    readonly tags!: string;
+    readonly tags?: string;
     categoryId!: number;
-    category!: Category;
+    category?: Category;
 
     constructor(data?: IPost) {
         if (data) {
@@ -3908,28 +3908,28 @@ export interface IPost {
     id: number;
     siteId: number;
     created: Date;
-    createdBy: string | null;
+    createdBy?: string | null;
     lastModified: Date;
-    lastModifiedBy: string | null;
+    lastModifiedBy?: string | null;
     title: string;
-    description: string;
-    slug: string | null;
+    description?: string;
+    slug?: string | null;
     author: string;
-    authorAvatar: string | null;
-    image: string | null;
-    ogImage: string | null;
-    ogTitle: string | null;
-    ogType: string | null;
+    authorAvatar?: string | null;
+    image?: string | null;
+    ogImage?: string | null;
+    ogTitle?: string | null;
+    ogType?: string | null;
     body: string;
     publishDate: Date;
     isFeatured: boolean;
-    tags: string;
+    tags?: string;
     categoryId: number;
-    category: Category;
+    category?: Category;
 }
 
 export class PostList implements IPostList {
-    items!: Post[];
+    items?: Post[];
     pageNumber!: number;
     readonly totalPages!: number;
     readonly totalCount!: number;
@@ -3987,7 +3987,7 @@ export class PostList implements IPostList {
 }
 
 export interface IPostList {
-    items: Post[];
+    items?: Post[];
     pageNumber: number;
     totalPages: number;
     totalCount: number;
@@ -3997,19 +3997,19 @@ export interface IPostList {
 
 export class PostRequest implements IPostRequest {
     title!: string;
-    description!: string;
-    slug!: string | null;
-    author!: string | null;
-    authorAvatar!: string | null;
-    image!: string | null;
-    ogImage!: string | null;
-    ogTitle!: string | null;
-    ogType!: string | null;
+    description?: string;
+    slug?: string | null;
+    author?: string | null;
+    authorAvatar?: string | null;
+    image?: string | null;
+    ogImage?: string | null;
+    ogTitle?: string | null;
+    ogType?: string | null;
     body!: string;
-    publishDate!: Date | null;
+    publishDate?: Date | null;
     isFeatured!: boolean;
     categoryId!: number;
-    tags!: string;
+    tags?: string;
 
     constructor(data?: IPostRequest) {
         if (data) {
@@ -4068,35 +4068,35 @@ export class PostRequest implements IPostRequest {
 
 export interface IPostRequest {
     title: string;
-    description: string;
-    slug: string | null;
-    author: string | null;
-    authorAvatar: string | null;
-    image: string | null;
-    ogImage: string | null;
-    ogTitle: string | null;
-    ogType: string | null;
+    description?: string;
+    slug?: string | null;
+    author?: string | null;
+    authorAvatar?: string | null;
+    image?: string | null;
+    ogImage?: string | null;
+    ogTitle?: string | null;
+    ogType?: string | null;
     body: string;
-    publishDate: Date | null;
+    publishDate?: Date | null;
     isFeatured: boolean;
     categoryId: number;
-    tags: string;
+    tags?: string;
 }
 
 export class Project implements IProject {
     id!: number;
     siteId!: number;
     created!: Date;
-    createdBy!: string | null;
+    createdBy?: string | null;
     lastModified!: Date;
-    lastModifiedBy!: string | null;
+    lastModifiedBy?: string | null;
     name!: string;
     description!: string;
-    slug!: string | null;
+    slug?: string | null;
     github!: string;
     demo!: string;
-    image!: string | null;
-    body!: string | null;
+    image?: string | null;
+    body?: string | null;
 
     constructor(data?: IProject) {
         if (data) {
@@ -4155,20 +4155,20 @@ export interface IProject {
     id: number;
     siteId: number;
     created: Date;
-    createdBy: string | null;
+    createdBy?: string | null;
     lastModified: Date;
-    lastModifiedBy: string | null;
+    lastModifiedBy?: string | null;
     name: string;
     description: string;
-    slug: string | null;
+    slug?: string | null;
     github: string;
     demo: string;
-    image: string | null;
-    body: string | null;
+    image?: string | null;
+    body?: string | null;
 }
 
 export class ProjectList implements IProjectList {
-    items!: Project[];
+    items?: Project[];
     pageNumber!: number;
     readonly totalPages!: number;
     readonly totalCount!: number;
@@ -4226,7 +4226,7 @@ export class ProjectList implements IProjectList {
 }
 
 export interface IProjectList {
-    items: Project[];
+    items?: Project[];
     pageNumber: number;
     totalPages: number;
     totalCount: number;
@@ -4237,11 +4237,11 @@ export interface IProjectList {
 export class ProjectRequest implements IProjectRequest {
     name!: string;
     description!: string;
-    slug!: string | null;
-    github!: string | null;
-    demo!: string | null;
-    image!: string | null;
-    body!: string | null;
+    slug?: string | null;
+    github?: string | null;
+    demo?: string | null;
+    image?: string | null;
+    body?: string | null;
 
     constructor(data?: IProjectRequest) {
         if (data) {
@@ -4287,11 +4287,11 @@ export class ProjectRequest implements IProjectRequest {
 export interface IProjectRequest {
     name: string;
     description: string;
-    slug: string | null;
-    github: string | null;
-    demo: string | null;
-    image: string | null;
-    body: string | null;
+    slug?: string | null;
+    github?: string | null;
+    demo?: string | null;
+    image?: string | null;
+    body?: string | null;
 }
 
 export class RegisterRequest implements IRegisterRequest {
@@ -4341,13 +4341,13 @@ export interface IRegisterRequest {
 export class Site implements ISite {
     id!: number;
     name!: string;
-    slug!: string | null;
-    description!: string;
+    slug?: string | null;
+    description?: string;
     baseUrl!: string;
     created!: Date;
-    createdBy!: string | null;
+    createdBy?: string | null;
     lastModified!: Date;
-    lastModifiedBy!: string | null;
+    lastModifiedBy?: string | null;
 
     constructor(data?: ISite) {
         if (data) {
@@ -4397,17 +4397,17 @@ export class Site implements ISite {
 export interface ISite {
     id: number;
     name: string;
-    slug: string | null;
-    description: string;
+    slug?: string | null;
+    description?: string;
     baseUrl: string;
     created: Date;
-    createdBy: string | null;
+    createdBy?: string | null;
     lastModified: Date;
-    lastModifiedBy: string | null;
+    lastModifiedBy?: string | null;
 }
 
 export class SiteList implements ISiteList {
-    items!: Site[];
+    items?: Site[];
     pageNumber!: number;
     readonly totalPages!: number;
     readonly totalCount!: number;
@@ -4465,7 +4465,7 @@ export class SiteList implements ISiteList {
 }
 
 export interface ISiteList {
-    items: Site[];
+    items?: Site[];
     pageNumber: number;
     totalPages: number;
     totalCount: number;
@@ -4475,8 +4475,8 @@ export interface ISiteList {
 
 export class SiteRequest implements ISiteRequest {
     name!: string;
-    description!: string;
-    slug!: string | null;
+    description?: string;
+    slug?: string | null;
     baseUrl!: string;
 
     constructor(data?: ISiteRequest) {
@@ -4516,8 +4516,8 @@ export class SiteRequest implements ISiteRequest {
 
 export interface ISiteRequest {
     name: string;
-    description: string;
-    slug: string | null;
+    description?: string;
+    slug?: string | null;
     baseUrl: string;
 }
 
@@ -4525,15 +4525,15 @@ export class Tag implements ITag {
     id!: number;
     siteId!: number;
     created!: Date;
-    createdBy!: string | null;
+    createdBy?: string | null;
     lastModified!: Date;
-    lastModifiedBy!: string | null;
+    lastModifiedBy?: string | null;
     name!: string;
     description!: string;
-    slug!: string | null;
+    slug?: string | null;
     icon!: string;
     banner!: string;
-    body!: string | null;
+    body?: string | null;
 
     constructor(data?: ITag) {
         if (data) {
@@ -4590,19 +4590,19 @@ export interface ITag {
     id: number;
     siteId: number;
     created: Date;
-    createdBy: string | null;
+    createdBy?: string | null;
     lastModified: Date;
-    lastModifiedBy: string | null;
+    lastModifiedBy?: string | null;
     name: string;
     description: string;
-    slug: string | null;
+    slug?: string | null;
     icon: string;
     banner: string;
-    body: string | null;
+    body?: string | null;
 }
 
 export class TagList implements ITagList {
-    items!: Tag[];
+    items?: Tag[];
     pageNumber!: number;
     readonly totalPages!: number;
     readonly totalCount!: number;
@@ -4660,7 +4660,7 @@ export class TagList implements ITagList {
 }
 
 export interface ITagList {
-    items: Tag[];
+    items?: Tag[];
     pageNumber: number;
     totalPages: number;
     totalCount: number;
@@ -4671,10 +4671,10 @@ export interface ITagList {
 export class TagRequest implements ITagRequest {
     name!: string;
     description!: string;
-    slug!: string | null;
-    icon!: string | null;
-    banner!: string | null;
-    body!: string | null;
+    slug?: string | null;
+    icon?: string | null;
+    banner?: string | null;
+    body?: string | null;
 
     constructor(data?: ITagRequest) {
         if (data) {
@@ -4718,10 +4718,10 @@ export class TagRequest implements ITagRequest {
 export interface ITagRequest {
     name: string;
     description: string;
-    slug: string | null;
-    icon: string | null;
-    banner: string | null;
-    body: string | null;
+    slug?: string | null;
+    icon?: string | null;
+    banner?: string | null;
+    body?: string | null;
 }
 
 export interface FileParameter {
