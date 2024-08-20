@@ -3,6 +3,7 @@ import type { AdminPageProps } from "app/_components/admin/common";
 import { Asset, Client, FileParameter } from "lib/admin-api";
 import { ChangeEvent, MouseEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
+import FolderSelectAdmin, { FolderOption } from "app/_components/admin/assets/folder-select";
 
 type Props = {
     client: Client,
@@ -15,12 +16,14 @@ const CreateAssetAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) =
     const [imageWidth, setImageWidth] = useState(0);
     const [imageHeight, setImageHeight] = useState(0);
     const [generateThumbnails, setGenerateThumbnails] = useState(false);
-    const [folderId, setFolderId] = useState(0);
+    const [folder, setFolder] = useState<FolderOption | null>(null);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [resultMessage, setResultMessage] = useState('');
 
-    
+    const handleFolderChange = (value: FolderOption | null) => {
+        setFolder(value);
+    };
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -41,7 +44,16 @@ const CreateAssetAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) =
             let result: Asset;
 
             try {
-                result = await client.assetsUpload(1, file, caption, description, '', imageWidth, imageHeight, generateThumbnails, folderId );
+                result = await client.assetsUpload(1, 
+                    file, 
+                    caption, 
+                    description, 
+                    '', 
+                    imageWidth, 
+                    imageHeight, 
+                    generateThumbnails, 
+                    folder == null ? 0 : parseInt(folder.value) 
+                );
             }
             catch {
                 setIsSubmitting(false);
@@ -69,6 +81,7 @@ const CreateAssetAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) =
                     <input id="file" name="file" type="file" onChange={(e) => handleFileChange(e)}
                         className="shadow appearance-none border border-muted rounded w-full py-2 px-3 bg-base-alt opacity-90 text-base leading-tight focus:outline-none focus:shadow-outline"
                     />
+                    <FolderSelectAdmin client={client} value={folder} onChange={handleFolderChange} />
                 </div>
                 <div className="mb-4 w-full">
                     <button type="submit" className="button-primary" onClick={submitForm} disabled={isSubmitting}>
@@ -78,14 +91,6 @@ const CreateAssetAdmin: React.FunctionComponent<AdminPageProps> = ({ client }) =
             </form>
         </div>
     );
-
-    // return (
-    //     <div>
-    //         <h1 className="pb-4">Create Asset</h1>
-    //         <Link className="button-outline" to="/admin/posts">Back</Link>
-    //         <p className="pt-4">here&apos;s a asset to edit</p>
-    //     </div>
-    // );
 }
 
 export default CreateAssetAdmin;
