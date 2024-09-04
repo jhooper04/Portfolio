@@ -102,12 +102,12 @@ export default function AdminPage({apiBaseUrl}: Props) {
         <>
             <Router>
                 <main className="w-screen h-screen flex flex-row">
-                    <div className="w-[250px] py-3 border-r border-slate-700">
+                    <div className="w-[12rem] py-3 border-r border-slate-700">
                         {Object.keys(adminRoutes).map((route) => !adminRoutes[route].hidden ? (
                             <AdminNavLink key={route} to={route} end={route == "/admin"}>{adminRoutes[route].name}</AdminNavLink>
                         ) : null)}
                     </div>
-                    <div className="flex-grow">
+                    <div className="flex-grow min-w-0">
                         <Routes>
                             {Object.entries(flatRoutes).map((keyValue) => (
                                 <Route key={keyValue[0]} path={keyValue[0]} element={keyValue[1].component(client, flatRoutes)} />
