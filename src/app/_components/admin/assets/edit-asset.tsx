@@ -1,8 +1,7 @@
 "use client";
 import { ThemedButton, type AdminPageProps } from "app/_components/admin/common";
-import { Asset, Client, FileParameter } from "lib/admin-api";
+import { Asset, FileParameter } from "lib/admin-api";
 import { ChangeEvent, MouseEventHandler, useState } from "react";
-import { Link } from "react-router-dom";
 import FolderSelectAdmin, { FolderOption } from "app/_components/admin/assets/folder-select";
 import AdminHeader from "../admin-header";
 
