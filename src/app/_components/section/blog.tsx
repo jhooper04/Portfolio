@@ -20,8 +20,8 @@ export default function BlogSection({posts, tags, categories}: Props) {
                 <h2 className="text-2xl font-bold leading-tight text-left">Blog</h2>
                 <div className="grid grid-cols-3 gap-3">
                     {featured.map((post) => (
-                        <Link key={post.id} href={`/blog/${post.category.slug}/${post.slug}`} className="block card p-4">
-                            <h4 className="text-xl font-bold tracking-tighter">{post.title}</h4><span>{post.category.name}</span>
+                        <Link key={post.id} href={`/blog/${post?.category?.slug}/${post.slug}`} className="block card p-4">
+                            <h4 className="text-xl font-bold tracking-tighter">{post.title}</h4><span>{post?.category?.name}</span>
                             <p>
                                 {post.description}
                             </p>
@@ -29,8 +29,8 @@ export default function BlogSection({posts, tags, categories}: Props) {
                     ))}
                     <div className="col-span-2 gap-3 flex flex-col">
                         {notFeatured.map((post) => (
-                            <Link key={post.id} href={`/blog/${post.category.slug}/${post.slug}`} className="block card p-4">
-                                <h4 className="text-lg font-bold">{post.title}</h4><span>{post.category.name}</span>
+                            <Link key={post.id} href={`/blog/${post?.category?.slug}/${post.slug}`} className="block card p-4">
+                                <h4 className="text-lg font-bold">{post.title}</h4><span>{post?.category?.name}</span>
                                 <p>
                                     {post.description}
                                 </p>

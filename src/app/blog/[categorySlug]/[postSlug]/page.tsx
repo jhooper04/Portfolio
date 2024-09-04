@@ -14,7 +14,10 @@ const client = new Client(new ApiConfig(process.env.API_KEY), process.env.SERVER
 
 export async function generateStaticParams() {
     const postsResponse = await await client.postsList(1);
-    return postsResponse.items.map((post) => ({ categorySlug: post.category.slug, postSlug: post.slug }));
+
+    if (postsResponse.items == undefined) throw "Invalid post response items in generateStaticParams";
+
+    return postsResponse.items.map((post) => ({ categorySlug: post.category?.slug, postSlug: post.slug }));
 }
 
 export default async function BlogCategoryPost({ params: { categorySlug, postSlug } }:Props) {

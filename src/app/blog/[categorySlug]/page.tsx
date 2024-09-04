@@ -14,6 +14,9 @@ const client = new Client(new ApiConfig(process.env.API_KEY), process.env.SERVER
 
 export async function generateStaticParams() {
     const categoriesResponse = await await client.categoriesList(1);
+
+    if (categoriesResponse.items == undefined) throw "Invalid post response items in generateStaticParams";
+
     return categoriesResponse.items.map((category) => ({ categorySlug: category.slug}));
 }
 

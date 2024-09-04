@@ -16,7 +16,7 @@ export async function generateStaticParams() {
 
     const tagsResponse = await await client.tagsList(1);
 
-    //console.log(tagsResponse.items.map((tag) => ({ tagSlug: tag.slug})));
+    if (tagsResponse.items == undefined) throw "Invalid post response items in generateStaticParams";
 
     return tagsResponse.items.map((tag) => ({ tagSlug: tag.slug}));
 }
