@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTable, useSortBy, useFilters, Column, TableInstance, usePagination, TableState, TableOptions } from 'react-table';
 
 export interface FetchDataParams {
@@ -56,20 +56,20 @@ const DataTable = <DataRow extends object,>({ columns, fetchRequest }: Props<Dat
     const [pageCount, setPageCount] = useState<number>(0);
     const [totalRows, setTotalRows] = useState<number>(0);
 
-    const fetchData = async (params: FetchDataParams) => {
+    const fetchData = useCallback(async (params: FetchDataParams) => {
         setLoading(true);
 
         try {
             const response = await fetchRequest(params);
             setData(response.items || []);
-            setPageCount(Math.ceil(response.totalCount / pageSize));
+            setPageCount(Math.ceil(response.totalCount / params.pageSize));
             setTotalRows(response.totalCount);
         } catch (error) {
             console.error('Failed to fetch data:', error);
         } finally {
             setLoading(false);
         }
-    };
+    }, [fetchRequest]);
 
     const {
         getTableProps,
@@ -105,7 +105,7 @@ const DataTable = <DataRow extends object,>({ columns, fetchRequest }: Props<Dat
 
     useEffect(() => {
         fetchData({ pageSize, pageIndex, sortBy, filters });
-    }, [pageIndex, pageSize, sortBy, filters]);
+    }, [fetchData, pageIndex, pageSize, sortBy, filters]);
 
     return (
         <>
